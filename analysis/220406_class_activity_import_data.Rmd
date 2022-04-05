@@ -23,18 +23,17 @@ Class: ECEV 36500 Quantitative microbial ecology (**Seppe Kuehn**)
 # libraries
 library(dplyr)
 library(ggplot2)
-library(RColorBrewer)
 library(vegan)
+library(ape)
 library(tidyverse)
+library(tidyr)
 library(magrittr)
 library(readxl)
+library(openxlsx)
 library(reshape2)
 library(gtools)
-library(devtools)
-library(openxlsx)
-library(ape)
 library(stringr)
-library(tidyr)
+
 
 mytheme_2d <- theme_bw() + 
   theme(text = element_text(family="serif")) +
