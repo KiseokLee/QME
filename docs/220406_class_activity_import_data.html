@@ -476,16 +476,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKiseokLeeQMEtree2ae634860d0ec5dcb0aede4f9da68354e4155ac7targetblank2ae6348a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/KiseokLee/QME/tree/2ae634860d0ec5dcb0aede4f9da68354e4155ac7" target="_blank">2ae6348</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKiseokLeeQMEtree03c4d4793d77d897c2bc0fc4fbb5e804b5ef0193targetblank03c4d47a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/KiseokLee/QME/tree/03c4d4793d77d897c2bc0fc4fbb5e804b5ef0193" target="_blank">03c4d47</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomKiseokLeeQMEtree2ae634860d0ec5dcb0aede4f9da68354e4155ac7targetblank2ae6348a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomKiseokLeeQMEtree03c4d4793d77d897c2bc0fc4fbb5e804b5ef0193targetblank03c4d47a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/KiseokLee/QME/tree/2ae634860d0ec5dcb0aede4f9da68354e4155ac7" target="_blank">2ae6348</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/KiseokLee/QME/tree/03c4d4793d77d897c2bc0fc4fbb5e804b5ef0193" target="_blank">03c4d47</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -537,6 +537,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/KiseokLee/QME/blob/03c4d4793d77d897c2bc0fc4fbb5e804b5ef0193/analysis/220406_class_activity_import_data.Rmd" target="_blank">03c4d47</a>
+</td>
+<td>
+KiseokLee
+</td>
+<td>
+2022-04-05
+</td>
+<td>
+wflow_publish(“analysis/220406_class_activity_import_data.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/KiseokLee/QME/1e79acdc13e693047ff1683bc8c223b20989eaff/docs/220406_class_activity_import_data.html" target="_blank">1e79acd</a>
+</td>
+<td>
+KiseokLee
+</td>
+<td>
+2022-04-05
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -603,18 +637,17 @@ Class: ECEV 36500 Quantitative microbial ecology (<strong>Seppe Kuehn</strong>)<
 <pre class="r"><code># libraries
 library(dplyr)
 library(ggplot2)
-library(RColorBrewer)
 library(vegan)
+library(ape)
 library(tidyverse)
+library(tidyr)
 library(magrittr)
 library(readxl)
+library(openxlsx)
 library(reshape2)
 library(gtools)
-library(devtools)
-library(openxlsx)
-library(ape)
 library(stringr)
-library(tidyr)
+
 
 mytheme_2d &lt;- theme_bw() + 
   theme(text = element_text(family=&quot;serif&quot;)) +
@@ -1772,35 +1805,31 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] ape_5.5            openxlsx_4.2.3     devtools_2.4.0     usethis_2.0.1     
- [5] gtools_3.8.2       reshape2_1.4.4     readxl_1.3.1       magrittr_2.0.1    
- [9] forcats_0.5.1      stringr_1.4.0      purrr_0.3.4        readr_1.4.0       
-[13] tidyr_1.1.3        tibble_3.0.4       tidyverse_1.3.1    vegan_2.5-7       
-[17] lattice_0.20-41    permute_0.9-5      RColorBrewer_1.1-2 ggplot2_3.3.5     
-[21] dplyr_1.0.5        workflowr_1.6.2   
+ [1] gtools_3.8.2    reshape2_1.4.4  openxlsx_4.2.3  readxl_1.3.1   
+ [5] magrittr_2.0.1  forcats_0.5.1   stringr_1.4.0   purrr_0.3.4    
+ [9] readr_1.4.0     tidyr_1.1.3     tibble_3.0.4    tidyverse_1.3.1
+[13] ape_5.5         vegan_2.5-7     lattice_0.20-41 permute_0.9-5  
+[17] ggplot2_3.3.5   dplyr_1.0.5     workflowr_1.6.2
 
 loaded via a namespace (and not attached):
- [1] nlme_3.1-149      fs_1.5.0          lubridate_1.7.10  httr_1.4.2       
- [5] rprojroot_2.0.2   tools_4.0.3       backports_1.2.1   bslib_0.2.5.1    
- [9] utf8_1.1.4        R6_2.5.0          DBI_1.1.1         mgcv_1.8-33      
-[13] colorspace_2.0-0  withr_2.4.2       prettyunits_1.1.1 processx_3.5.1   
-[17] tidyselect_1.1.1  compiler_4.0.3    git2r_0.28.0      cli_3.0.1        
-[21] rvest_1.0.1       xml2_1.3.2        desc_1.3.0        labeling_0.4.2   
-[25] sass_0.4.0        scales_1.1.1      callr_3.7.0       digest_0.6.27    
-[29] rmarkdown_2.9     pkgconfig_2.0.3   htmltools_0.5.1.1 sessioninfo_1.1.1
-[33] highr_0.9         dbplyr_2.1.1      fastmap_1.1.0     rlang_0.4.10     
-[37] rstudioapi_0.13   farver_2.1.0      jquerylib_0.1.4   generics_0.1.0   
-[41] jsonlite_1.7.2    zip_2.1.1         Matrix_1.2-18     Rcpp_1.0.5       
-[45] munsell_0.5.0     fansi_0.4.2       lifecycle_1.0.0   stringi_1.5.3    
-[49] whisker_0.4       yaml_2.2.1        MASS_7.3-53       pkgbuild_1.2.0   
-[53] plyr_1.8.6        grid_4.0.3        parallel_4.0.3    promises_1.2.0.1 
-[57] crayon_1.4.1      haven_2.4.1       splines_4.0.3     hms_1.1.0        
-[61] ps_1.6.0          knitr_1.37        pillar_1.6.0      pkgload_1.2.1    
-[65] reprex_2.0.0      glue_1.4.2        evaluate_0.14     remotes_2.4.0    
-[69] modelr_0.1.8      vctrs_0.3.8       httpuv_1.6.0      testthat_3.0.2   
-[73] cellranger_1.1.0  gtable_0.3.0      assertthat_0.2.1  cachem_1.0.4     
-[77] xfun_0.29         broom_0.7.9       later_1.2.0       memoise_2.0.0    
-[81] cluster_2.1.0     ellipsis_0.3.2   </code></pre>
+ [1] httr_1.4.2        sass_0.4.0        jsonlite_1.7.2    splines_4.0.3    
+ [5] modelr_0.1.8      bslib_0.2.5.1     assertthat_0.2.1  highr_0.9        
+ [9] cellranger_1.1.0  yaml_2.2.1        pillar_1.6.0      backports_1.2.1  
+[13] glue_1.4.2        digest_0.6.27     promises_1.2.0.1  rvest_1.0.1      
+[17] colorspace_2.0-0  htmltools_0.5.1.1 httpuv_1.6.0      Matrix_1.2-18    
+[21] plyr_1.8.6        pkgconfig_2.0.3   broom_0.7.9       haven_2.4.1      
+[25] scales_1.1.1      whisker_0.4       later_1.2.0       git2r_0.28.0     
+[29] mgcv_1.8-33       farver_2.1.0      generics_0.1.0    ellipsis_0.3.2   
+[33] withr_2.4.2       cli_3.0.1         crayon_1.4.1      evaluate_0.14    
+[37] fs_1.5.0          fansi_0.4.2       nlme_3.1-149      MASS_7.3-53      
+[41] xml2_1.3.2        tools_4.0.3       hms_1.1.0         lifecycle_1.0.0  
+[45] munsell_0.5.0     reprex_2.0.0      cluster_2.1.0     zip_2.1.1        
+[49] compiler_4.0.3    jquerylib_0.1.4   rlang_0.4.10      grid_4.0.3       
+[53] rstudioapi_0.13   labeling_0.4.2    rmarkdown_2.9     gtable_0.3.0     
+[57] DBI_1.1.1         R6_2.5.0          lubridate_1.7.10  knitr_1.37       
+[61] utf8_1.1.4        rprojroot_2.0.2   stringi_1.5.3     parallel_4.0.3   
+[65] Rcpp_1.0.5        vctrs_0.3.8       dbplyr_2.1.1      tidyselect_1.1.1 
+[69] xfun_0.29        </code></pre>
 </div>
 </div>
 
