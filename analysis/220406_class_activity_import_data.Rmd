@@ -1,0 +1,443 @@
+---
+title: "220406_class_activity_import_data"
+author: "KiseokLee"
+date: "2022-04-05"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.width=11, fig.height=9,
+                      error=TRUE, echo=TRUE, eval=TRUE, warning=FALSE, message=FALSE)
+```
+
+## 220406 Class activity
+
+TA: **Kiseok Lee** \
+Date: 4/6/22 \
+Class: ECEV 36500 Quantitative microbial ecology (**Seppe Kuehn**)
+
+```{r}
+# libraries
+library(dplyr)
+library(ggplot2)
+library(RColorBrewer)
+library(vegan)
+library(tidyverse)
+library(magrittr)
+library(readxl)
+library(reshape2)
+library(gtools)
+library(devtools)
+library(openxlsx)
+library(ape)
+library(stringr)
+library(tidyr)
+
+mytheme_2d <- theme_bw() + 
+  theme(text = element_text(family="serif")) +
+  theme(plot.title = element_text(size = 19,hjust = 0.5, family="serif")) + 
+  theme(axis.title.x = element_text(size = 17,hjust = 0.5, family="serif")) + 
+  theme(axis.title.y = element_text(size = 17,hjust = 0.5, family="serif")) + 
+  theme(axis.text.x = element_text(hjust = 0.5, vjust=0.3,size=13, family="serif"))+
+  theme(axis.text.y = element_text(size=13, family="serif"))+
+  # theme(panel.grid.major = element_blank()) +
+  # theme(panel.grid.minor = element_blank(),panel.background=element_blank(),plot.background=element_blank()) +
+  theme(axis.ticks = element_line(size = 1.1))
+
+```
+
+## 1. Let's import data
+```{r}
+## change accordingly to your directory
+
+# this is metadata (env variable, diversity, biomass, etc information is here)
+df_meta <- openxlsx::read.xlsx("data/Sample.label_metadata.xlsx")
+dim(df_meta) # 243 samples
+head(df_meta)
+
+# this is the OTU read abundance in each sample (OTU is the Operational Taxonomy Unit, think of it as putative species)
+df_sample <- read_tsv("data/miTAG.taxonomic.profiles.release.tsv")
+dim(df_sample) # 139 sample
+head(df_sample)
+colnames(df_sample)
+
+# Agglomerate reads on taxonomic levels
+vec_sample <- colnames(df_sample)[grepl("TARA*",colnames(df_sample))]
+length(vec_sample) # 139 samples
+
+taxa_level = "Class"
+df_taxa_level <- df_sample %>% select(taxa_level, vec_sample)
+
+# add up the read abundance in each taxa in each sample
+df_taxa_aggre <- aggregate(df_taxa_level[,2:ncol(df_taxa_level)], by = df_taxa_level[1], function(x) sum(x, na.rm = TRUE))
+dim(df_taxa_aggre)
+head(df_taxa_aggre)
+
+# get relative abundance
+df_rel_abun <- df_taxa_aggre
+df_rel_abun <- tibble::column_to_rownames(df_rel_abun, var=taxa_level)
+df_rel_abun <- apply(df_rel_abun, 2, function(i) i/sum(i))
+apply(df_rel_abun, 2, sum) # sum of each sample is 1
+
+
+# function for getting relative abundance dataframe for each taxa level
+make_df_rel_abun <- function(df_sample, taxa_level = "Class"){
+  # Agglomerate reads on taxonomic levels
+  vec_sample <- colnames(df_sample)[grepl("TARA*",colnames(df_sample))]
+  length(vec_sample) # 139 samples
+  
+  df_taxa_level <- df_sample %>% select(taxa_level, vec_sample)
+  
+  # add up the read abundance in each taxa in each sample
+  df_taxa_aggre <- aggregate(df_taxa_level[,2:ncol(df_taxa_level)], by = df_taxa_level[1], function(x) sum(x, na.rm = TRUE))
+  dim(df_taxa_aggre)
+  head(df_taxa_aggre)
+  
+  # get relative abundance
+  df_rel_abun <- df_taxa_aggre
+  df_rel_abun <- tibble::column_to_rownames(df_rel_abun, var=taxa_level)
+  df_rel_abun <- apply(df_rel_abun, 2, function(i) i/sum(i))
+  apply(df_rel_abun, 2, sum) # sum of each sample is 1
+  
+  return(df_rel_abun)
+}
+
+# for all taxa level
+df_phylum <- make_df_rel_abun(df_sample, taxa_level = "Phylum") 
+df_class <- make_df_rel_abun(df_sample, taxa_level = "Class") 
+df_order <- make_df_rel_abun(df_sample, taxa_level = "Order") 
+df_family <- make_df_rel_abun(df_sample, taxa_level = "Family") 
+df_genus <- make_df_rel_abun(df_sample, taxa_level = "Genus") 
+df_otu <- df_sample %>% select(OTU.rep, vec_sample)
+
+
+```
+
+
+## 2. Ordination analysis
+
+## 2.1. Normalization (Sunagawa, 2015)
+For compositional data, we applied a logarithmic transformation to relative abundances using the function log10(x + x0), where x is the original relative abundance and x0 is a small constant, and x0 < min(x).
+
+```{r}
+# which taxa level?
+df_x = df_class
+
+# do we have any NA in the matrix?
+any(is.na(df_x)) # nope
+
+# should we do normalization of relative abundance before ordination?
+# Let's do the same as the Sunagawa 2015 paper.
+x0 = min(df_x[df_x >0]) * 0.001 
+df_x_lognorm <- log10(df_x + x0)
+
+```
+
+## 2.2. PCA method
+
+```{r}
+# PCA with prcomp
+pc <- prcomp(t(df_x_lognorm)) # transpose
+eigs <- pc$sdev^2
+# variance explained
+eigs[1] / sum(eigs) # pc1
+eigs[2] / sum(eigs) # pc2
+
+# dataframe for plotting
+df_out <- as.data.frame(pc$x) # extract principal components
+dim(df_out)
+head(df_out)
+
+# add environmental variable
+df_out <- df_out %>% select(PC1, PC2, PC3) # get only PC1, 2, 3
+df_out <- tibble::rownames_to_column(df_out, var = "Sample.label")
+dim(df_out)
+
+# get depth
+# split sample label to get the depth SRF, DCM, MES
+list_depth <- str_split(df_out$Sample.label, "_")
+vec_depth <- c()
+for (i in 1:length(list_depth)){
+  #print(i)
+  # print(list_depth[[i]][3])
+  vec_depth[i] <- list_depth[[i]][3]
+}
+  
+df_out$Depth <- vec_depth
+  
+df_merged <- df_out %>% left_join(df_meta, by = c("Sample.label"="Sample.label"))
+dim(df_merged)
+# colnames(df_merged)
+
+# plot PCA
+ggplot(df_merged,aes(x=PC1,y=PC2, label = Depth))+
+  theme(plot.title = element_text(size = 20,hjust = 0.5, face="bold")) +
+  geom_point(size = 5, alpha=0.9, aes(col= Depth))+
+  scale_fill_manual(values=cols) +
+  xlab(paste0('\n PC1', " (explained variance: ",round(eigs[1] / sum(eigs),3)*100,"%)"))+
+  ylab(paste0("PC2"," (explained variance: ",round(eigs[2] / sum(eigs),3)*100,"%) \n")) +
+  ggtitle("Principle component analysis for all samples \n") +
+  ## adjust positions
+  guides(fill = guide_legend(ncol = 4,reverse = T))+
+  theme(legend.position="bottom") +
+  mytheme_2d
+
+```
+
+## 2.2.1. regress PC1 and PC2 on to environmental variables, etc.
+- https://www.rdocumentation.org/packages/vegan/versions/2.4-2/topics/envfit \
+The function fits environmental vectors or factors onto an ordination. The projections of points onto vectors have maximum correlation with corresponding environmental variables, and the factors show the averages of factor levels. For continuous varaibles this is equal to fitting a linear trend surface (plane in 2D) for a variable (see ordisurf); this trend surface can be presented by showing its gradient (direction of steepest increase) using an arrow. The environmental variables are the dependent variables that are explained by the ordination scores, and each dependent variable is analysed separately.\
+- How this is calculated: https://stackoverflow.com/questions/60953996/how-are-envfit-results-created \
+- https://www.davidzeleny.net/anadat-r/doku.php/en:suppl_vars_examples \
+- https://www.davidzeleny.net/anadat-r/doku.php/en:pca_examples \
+- Visualization: https://jkzorz.github.io/2020/04/04/NMDS-extras.html \
+
+```{r}
+## Let's use envfit or vectorfit function to fit environmental variable/trait to PC1 and PC2
+
+# PCA with prcomp
+df_meta1 <- tibble::remove_rownames(df_meta)
+df_meta1 <- df_meta1 %>% filter(Sample.label %in% df_out$Sample.label)
+df_meta1 <- tibble::column_to_rownames(df_meta1, var = "Sample.label")
+df_meta1 <- df_meta1[,c(-1,-2)] # remove PANGAEA id and mean date
+head(df_meta1)
+df_meta_norm <- scale(df_meta1) # z-score transformation
+df_meta_norm <- as.data.frame(df_meta_norm)
+apply(df_meta_norm, 2, mean, na.rm=T) # column wise mean is 0
+
+head(df_meta_norm)
+# colnames(df_meta_norm)
+
+# select a subset of variables
+envfit(pc, df_meta_norm, permu = 999, na.rm=T)
+en <- envfit(pc, df_meta_norm, permu = 999, na.rm=T)
+en # here only longitude is significantly correlated!
+
+# plot(en)
+
+# plot the vectors it into ordination plot (ggplot)
+en_coord_cont = as.data.frame(scores(en, "vectors")) * ordiArrowMul(en)
+
+order(en$vectors$pvals) # order of p values
+en_coord_cont[order(en$vectors$pvals),] # in the order of p values
+en_coord <- en_coord_cont[order(en$vectors$pvals),] %>% head(10) # top 10 p values
+
+
+# plot PCA
+ggplot(df_merged,aes(x=PC1,y=PC2))+
+  theme(plot.title = element_text(size = 20,hjust = 0.5, face="bold")) +
+  geom_point(size = 5, alpha=0.9, aes(col= Depth))+
+  scale_fill_manual(values=cols) +
+  xlab(paste0('\n PC1', " (explained variance: ",round(eigs[1] / sum(eigs),3)*100,"%)"))+
+  ylab(paste0("PC2"," (explained variance: ",round(eigs[2] / sum(eigs),3)*100,"%) \n")) +
+  ggtitle("Principle component analysis for all samples \n") +
+  ## adjust positions
+  guides(fill = guide_legend(ncol = 4,reverse = T))+
+  theme(legend.position="bottom") +
+  
+  # vectors
+  geom_segment(aes(x = 0, y = 0, xend = PC1, yend = PC2), 
+       data = en_coord, size =1, alpha = 0.5, colour = "grey30") +
+  geom_text(data = en_coord, aes(x = PC1, y = PC2), colour = "grey30",
+       fontface = "bold", label = row.names(en_coord)) +
+  mytheme_2d
+
+
+```
+
+
+##. 2.3. PCoA method
+Let's use the Bray-Curtis dissimilarity 
+* should someone do normalization before calculating pair-wise dissimilarity distance? \
+https://ordnews.colostate.narkive.com/lMWF502c/1593-log-sqrt-and-other-transformation-with-bray-curtis-dissimilarity
+
+```{r}
+# calculate Bray-Curtis dissimilarity between samples
+dist_BC <- vegdist(t(df_x), "bray") # transposed df_x
+mat_BC <- as.matrix(dist_BC)
+dim(mat_BC)
+
+# PCA with prcomp
+# transpose dataframe
+pc <- prcomp(mat_BC)
+eigs <- pc$sdev^2
+# variance explained
+eigs[1] / sum(eigs) # pc1
+eigs[2] / sum(eigs) # pc2
+
+# dataframe for plotting
+df_out <- as.data.frame(pc$x)
+dim(df_out)
+head(df_out)
+
+# add environmental variable
+df_out <- df_out %>% select(PC1, PC2, PC3) # get only PC1, 2, 3
+df_out <- tibble::rownames_to_column(df_out, var = "Sample.label")
+dim(df_out)
+
+# get depth
+# split sample label to get the depth SRF, DCM, MES
+list_depth <- str_split(df_out$Sample.label, "_")
+vec_depth <- c()
+for (i in 1:length(list_depth)){
+  #print(i)
+  # print(list_depth[[i]][3])
+  vec_depth[i] <- list_depth[[i]][3]
+}
+  
+df_out$Depth <- vec_depth
+  
+df_merged <- df_out %>% left_join(df_meta, by = c("Sample.label"="Sample.label"))
+dim(df_merged)
+colnames(df_merged)
+
+# plot PCoA
+ggplot(df_merged,aes(x=PC1,y=PC2, label = Depth))+
+  theme(plot.title = element_text(size = 20,hjust = 0.5, face="bold")) +
+  geom_point(size = 5, alpha=0.9, aes(col= Depth))+
+  scale_fill_manual(values=cols) +
+  xlab(paste0('\n PCo1', " (explained variance: ",round(eigs[1] / sum(eigs),3)*100,"%)"))+
+  ylab(paste0("PCo2"," (explained variance: ",round(eigs[2] / sum(eigs),3)*100,"%) \n")) +
+  ggtitle("Principle coordinate analysis (PCoA) for all samples \n") +
+  ## adjust positions
+  guides(fill = guide_legend(ncol = 4,reverse = T))+
+  theme(legend.position="bottom") +
+  mytheme_2d
+
+
+
+
+```
+
+## 2.3.1. Regress PCo1 or PCo2 with environmental variables or traits!!
+
+```{r}
+## Let's use envfit or vectorfit function to fit environmental variable/trait to PC1 and PC2
+# select a subset of variables
+envfit(pc, df_meta_norm, permu = 999, na.rm=T)
+en <- envfit(pc, df_meta_norm, permu = 999, na.rm=T)
+en # here only longitude is significantly correlated!
+
+# plot the vectors it into ordination plot (ggplot)
+en_coord_cont = as.data.frame(scores(en, "vectors")) * ordiArrowMul(en)
+
+order(en$vectors$pvals) # order of p values
+en_coord_cont[order(en$vectors$pvals),] # in the order of p values
+en_coord <- en_coord_cont[order(en$vectors$pvals),] %>% head(10) # top 10 p values
+
+
+# plot
+ggplot(df_merged,aes(x=PC1,y=PC2))+
+  theme(plot.title = element_text(size = 20,hjust = 0.5, face="bold")) +
+  geom_point(size = 5, alpha=0.9, aes(col= Depth))+
+  scale_fill_manual(values=cols) +
+  xlab(paste0('\n PCo1', " (explained variance: ",round(eigs[1] / sum(eigs),3)*100,"%)"))+
+  ylab(paste0("PCo2"," (explained variance: ",round(eigs[2] / sum(eigs),3)*100,"%) \n")) +
+  ggtitle("Principle component analysis for all samples \n") +
+  ## adjust positions
+  guides(fill = guide_legend(ncol = 4,reverse = T))+
+  theme(legend.position="bottom") +
+  
+  # vectors
+  geom_segment(aes(x = 0, y = 0, xend = PC1, yend = PC2), 
+       data = en_coord, size =1, alpha = 0.5, colour = "grey30") +
+  geom_text(data = en_coord, aes(x = PC1, y = PC2), colour = "grey30",
+       fontface = "bold", label = row.names(en_coord)) +
+  mytheme_2d
+
+
+```
+
+## 2.4. NMDS
+Again use Bray-Curtis distance
+```{r}
+# Bray-Curtis distance
+# dist_BC
+
+# we`ll set a seed to make the results reproducible
+set.seed(2)
+
+NMDS <- metaMDS(dist_BC, k = 2, trymax = 1000, trace = F)
+
+stressplot(NMDS) # There is a good non-metric fit between observed dissimilarities (in our distance matrix) and the distances in ordination space.
+
+df_nmds <- as.data.frame(NMDS$points)
+dim(df_nmds)
+NMDS$stress
+
+# get depth
+# split sample lable to get the depth SRF, DCM, MES
+list_depth <- str_split(rownames(df_nmds), "_")
+vec_depth <- c()
+for (i in 1:length(list_depth)){
+  #print(i)
+  # print(list_depth[[i]][3])
+  vec_depth[i] <- list_depth[[i]][3]
+}
+  
+df_nmds$Depth <- vec_depth
+
+# merge metadata
+df_nmds <- tibble::rownames_to_column(df_nmds, var="Sample.label")
+df_merged <- df_nmds %>% left_join(df_meta, by = c("Sample.label"="Sample.label"))
+dim(df_merged)
+colnames(df_merged)
+
+# plot NMDS
+ggplot(df_merged, aes(x=MDS1,y=MDS2))+
+  theme(plot.title = element_text(size = 20,hjust = 0.5, face="bold")) +
+  geom_point(size = 5, alpha=0.9, aes(col= Depth))+
+  scale_fill_manual(values=cols) +
+  xlab(paste0('\n NMDS1'))+
+  ylab(paste0("NMDS2")) +
+  ggtitle("Non-metric multidimensional scaling(NMDS) for all samples \n") +
+  ## adjust positions
+  guides(fill = guide_legend(ncol = 4,reverse = T))+
+  theme(legend.position="bottom") +
+  mytheme_2d
+
+```
+
+# plot with envfit
+```{r}
+
+# select a subset of variables
+envfit(NMDS, df_meta_norm, permu = 999, na.rm=T)
+en_nmds <- envfit(NMDS, df_meta_norm, permu = 999, na.rm=T)
+en_nmds # here only longitude is significantly correlated!
+
+# plot the vectors it into ordination plot (ggplot)
+en_coord_cont = as.data.frame(scores(en_nmds, "vectors")) * ordiArrowMul(en_nmds)
+
+order(en_nmds$vectors$pvals) # order of p values
+en_coord_cont[order(en_nmds$vectors$pvals),] # in the order of p values
+en_coord <- en_coord_cont[order(en_nmds$vectors$pvals),] %>% head(10) # top 10 p values
+
+# plot NMDS
+ggplot(df_merged, aes(x=MDS1,y=MDS2))+
+  theme(plot.title = element_text(size = 20,hjust = 0.5, face="bold")) +
+  geom_point(size = 5, alpha=0.9, aes(col= Depth))+
+  scale_fill_manual(values=cols) +
+  xlab(paste0('\n NMDS1'))+
+  ylab(paste0("NMDS2")) +
+  ggtitle("Non-metric multidimensional scaling(NMDS) for all samples \n") +
+  ## adjust positions
+  guides(fill = guide_legend(ncol = 4,reverse = T))+
+  theme(legend.position="bottom") +
+  
+  # vectors
+  geom_segment(aes(x = 0, y = 0, xend = NMDS1, yend = NMDS2), 
+       data = en_coord, size =1, alpha = 0.5, colour = "grey30") +
+  geom_text(data = en_coord, aes(x = NMDS1, y = NMDS2), colour = "grey30",
+       fontface = "bold", label = row.names(en_coord)) +
+  mytheme_2d
+
+
+plot(NMDS, type = "t", display = "sites")
+plot(en, p.max = 0.3)
+```
+
+
