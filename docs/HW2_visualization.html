@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="KiseokLee" />
+
+<meta name="date" content="2022-04-03" />
+
+<title>HW2_visualization</title>
+
+<script src="site_libs/header-attrs-2.9/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">QME</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/KiseokLee/QME">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">HW2_visualization</h1>
+<h4 class="author">KiseokLee</h4>
+<h4 class="date">2022-04-03</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-04-05
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>QME/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20220403code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20220403)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20220403code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20220403)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomKiseokLeeQMEtreea23607518288e6403048b8e43491fffb707461d4targetblanka236075a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/KiseokLee/QME/tree/a23607518288e6403048b8e43491fffb707461d4" target="_blank">a236075</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomKiseokLeeQMEtreea23607518288e6403048b8e43491fffb707461d4targetblanka236075a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/KiseokLee/QME/tree/a23607518288e6403048b8e43491fffb707461d4" target="_blank">a236075</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  Sample.label_metadata.xlsx
+    Untracked:  data/OM.CompanionTables.xlsx
+    Untracked:  data/Sample.label_metadata.xlsx
+    Untracked:  data/miTAG.taxonomic.profiles.release.tsv
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/HW2_visualization.Rmd</code>) and HTML (<code>docs/HW2_visualization.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/KiseokLee/QME/blob/a23607518288e6403048b8e43491fffb707461d4/analysis/HW2_visualization.Rmd" target="_blank">a236075</a>
+</td>
+<td>
+KiseokLee
+</td>
+<td>
+2022-04-05
+</td>
+<td>
+wflow_publish("analysis/*.Rmd")
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="hw2-visualization" class="section level2">
+<h2>HW2 Visualization</h2>
+<p>Researcher: <strong>Kiseok Lee</strong><br />
+Date: 4/3/22<br />
+Lab: <strong>Seppe Kuehn</strong></p>
+<pre class="r"><code># libraries
+library(dplyr)
+library(ggplot2)
+library(RColorBrewer)
+library(vegan)
+library(tidyverse)
+library(magrittr)
+library(readxl)
+library(reshape2)
+library(gtools)
+library(devtools)
+library(openxlsx)
+library(ape)
+library(stringr)
+library(tidyr)
+
+## theme for ggplot
+mytheme &lt;- theme_bw() + 
+  theme(plot.title = element_text(size = 19,hjust = 0.5, family=&quot;serif&quot;)) + 
+  theme(axis.title.x = element_text(size = 17,hjust = 0.5, family=&quot;serif&quot;)) + 
+  theme(axis.title.y = element_text(size = 17,hjust = 0.5, family=&quot;serif&quot;)) + 
+  theme(axis.text.x = element_text(hjust = 0.5, vjust=0.3,size=13, family=&quot;serif&quot;))+
+  theme(axis.text.y = element_text(size=10, family=&quot;serif&quot;))+
+  theme(panel.grid.major = element_blank()) +
+  theme(panel.grid.minor = element_blank(),panel.background=element_blank(),panel.border=element_blank(),plot.background=element_blank()) +
+  theme(axis.ticks = element_line(size = 1.1))
+
+mytheme_2d &lt;- theme_bw() + 
+  theme(plot.title = element_text(size = 19,hjust = 0.5, family=&quot;serif&quot;)) + 
+  theme(axis.title.x = element_text(size = 17,hjust = 0.5, family=&quot;serif&quot;)) + 
+  theme(axis.title.y = element_text(size = 17,hjust = 0.5, family=&quot;serif&quot;)) + 
+  theme(axis.text.x = element_text(hjust = 0.5, vjust=0.3,size=13, family=&quot;serif&quot;))+
+  theme(axis.text.y = element_text(size=13, family=&quot;serif&quot;))+
+  # theme(panel.grid.major = element_blank()) +
+  # theme(panel.grid.minor = element_blank(),panel.background=element_blank(),plot.background=element_blank()) +
+  theme(axis.ticks = element_line(size = 1.1))
+
+
+# color collection
+my_color_collection &lt;- c(
+  &quot;#CBD588&quot;, &quot;#5F7FC7&quot;, &quot;orange&quot;, &quot;#AD6F3B&quot;, &quot;#673770&quot;, 
+  &quot;#D14285&quot;, &quot;#652926&quot;, &quot;#C84248&quot;, &quot;#8569D5&quot;, &quot;#5E738F&quot;,
+  &quot;#D1A33D&quot;, &quot;#8A7C64&quot;, &quot;#599861&quot;,&quot;#616163&quot;, &quot;#FFCDB2&quot;,
+  &quot;#6D9F71&quot;, &quot;#242F40&quot;,
+  &quot;#CCA43B&quot;, &quot;#F92A82&quot;, &quot;#ED7B84&quot;, &quot;#7EB77F&quot;, 
+  &quot;#DEC4A1&quot;, &quot;#E5D1D0&quot;, &#39;#0E8482&#39;, &#39;#C9DAEA&#39;, &#39;#337357&#39;, 
+  &#39;#95C623&#39;, &#39;#E55812&#39;, &#39;#04471C&#39;, &#39;#F2D7EE&#39;, &#39;#D3BCC0&#39;, 
+  &#39;#A5668B&#39;, &#39;#69306D&#39;, &#39;#0E103D&#39;, &#39;#1A535C&#39;, &#39;#4ECDC4&#39;, 
+  &#39;#F7FFF7&#39;, &#39;#FF6B6B&#39;, &#39;#FFE66D&#39;, &#39;#6699CC&#39;, &#39;#FFF275&#39;, 
+  &#39;#FF8C42&#39;, &#39;#FF3C38&#39;, &#39;#A23E48&#39;, &#39;#000000&#39;, &#39;#CF5C36&#39;, 
+  &#39;#EEE5E9&#39;, &#39;#7C7C7C&#39;, &#39;#EFC88B&#39;, &#39;#2E5266&#39;, &#39;#6E8898&#39;, 
+  &#39;#9FB1BC&#39;, &#39;#D3D0CB&#39;, &#39;#E2C044&#39;, &#39;#5BC0EB&#39;, &#39;#FDE74C&#39;, 
+  &#39;#9BC53D&#39;, &#39;#E55934&#39;, &#39;#FA7921&#39;, &quot;#CD9BCD&quot;, &quot;#508578&quot;, &quot;#DA5724&quot;)
+
+# for git push, use this instead of using wflow_git_push()
+# git push -u origin master (in the Git app / in the working directory)</code></pre>
+</div>
+<div id="hw2-problem-3." class="section level2">
+<h2>HW2 problem 3.</h2>
+<p>Now make a plot of <span class="math inline">\(E[sub]\)</span> as a function of <span class="math inline">\(m\)</span> for <span class="math inline">\(n = 1000\)</span>. Here is the main point <span class="math display">\[  E[sub] = 6\alpha \Delta t = \boxed{-\dfrac{3}{4}\log (1 - \dfrac{4}{3}\dfrac{m}{n})} \]</span></p>
+<pre class="r"><code>m &lt;- seq(0, 3000/4, length.out = 10000)
+
+E_sub &lt;- -3/4 * log(1-( (4*m) / (3*1000) ))
+
+plot(m, E_sub, col = &quot;blue&quot;, lty = 1, pch = 19, lwd = 1, 
+     ylab = &quot;E[sub]&quot;, main = &quot;Expected number of substitutions given the number of observed substitutions(m)&quot;)</code></pre>
+<p><img src="figure/HW2_visualization.Rmd/unnamed-chunk-2-1.png" width="1056" style="display: block; margin: auto;" /></p>
+</div>
+<div id="hw2-problem-4.-import-data-and-match-the-smaple-ids-to-pangea-ids." class="section level2">
+<h2>HW2 problem 4. Import data and match the smaple IDs to Pangea IDs.</h2>
+<pre class="r"><code>t_w1 &lt;- openxlsx::read.xlsx(&quot;data/OM.CompanionTables.xlsx&quot;, sheet = &quot;Table W1&quot;)
+dim(t_w1) # 245</code></pre>
+<pre><code>[1] 243  17</code></pre>
+<pre class="r"><code>head(t_w1)</code></pre>
+<pre><code>  Sample.label.[TARA_station#_environmental-feature_size-fraction]
+1                                            TARA_004_DCM_0.22-1.6
+2                                            TARA_004_SRF_0.22-1.6
+3                                            TARA_007_DCM_0.22-1.6
+4                                            TARA_007_SRF_0.22-1.6
+5                                            TARA_009_DCM_0.22-1.6
+6                                            TARA_009_SRF_0.22-1.6
+  INSDC.sample.accession.number(s) INSDC.run.accession.number(s)
+1                        ERS487936           ERR598950|ERR599095
+2                        ERS487899           ERR598955|ERR599003
+3                        ERS477953                     ERR315856
+4                        ERS477931                     ERR315857
+5                        ERS488147           ERR594315|ERR594329
+6                        ERS488119 ERR594288|ERR594316|ERR594317
+                   Corresponding.nucleotides.data.published.at.ENA
+1           http://www.ebi.ac.uk/ena/data/view/ERR598950,ERR599095
+2           http://www.ebi.ac.uk/ena/data/view/ERR598955,ERR599003
+3                     http://www.ebi.ac.uk/ena/data/view/ERR315856
+4                     http://www.ebi.ac.uk/ena/data/view/ERR315857
+5           http://www.ebi.ac.uk/ena/data/view/ERR594315,ERR594329
+6 http://www.ebi.ac.uk/ena/data/view/ERR594288,ERR594316,ERR594317
+  PANGAEA.sample.identifier Corresponding.contextual.data.published.at.PANGAEA
+1           TARA_X000000368 http://www.pangaea.de/search?All&amp;q=TARA_X000000368
+2           TARA_Y200000002 http://www.pangaea.de/search?All&amp;q=TARA_Y200000002
+3           TARA_A200000159 http://www.pangaea.de/search?All&amp;q=TARA_A200000159
+4           TARA_A200000113 http://www.pangaea.de/search?All&amp;q=TARA_A200000113
+5           TARA_X000001036 http://www.pangaea.de/search?All&amp;q=TARA_X000001036
+6           TARA_X000000950 http://www.pangaea.de/search?All&amp;q=TARA_X000000950
+  Station.identifier.[TARA_station#] Date/Time.[yyyy-mm-ddThh:mm]
+1                           TARA_004             2009-09-15T18:00
+2                           TARA_004             2009-09-15T11:30
+3                           TARA_007             2009-09-23T16:08
+4                           TARA_007             2009-09-23T12:50
+5                           TARA_009             2009-09-28T16:59
+6                           TARA_009             2009-09-28T12:18
+  Latitude.[degrees.North] Longitude.[degrees.East] Sampling.depth.[m]
+1                  36.5533                  -6.5669                 40
+2                  36.5533                  -6.5669                  5
+3                  37.0541                   1.9478                 42
+4                  37.0510                   1.9378                  5
+5                  39.0609                   5.9422                 55
+6                  39.1633                   5.9160                  5
+                                 Environmental.Feature
+1 (DCM) deep chlorophyll maximum layer (ENVO:01000326)
+2            (SRF) surface water layer (ENVO:00002042)
+3 (DCM) deep chlorophyll maximum layer (ENVO:01000326)
+4            (SRF) surface water layer (ENVO:00002042)
+5 (DCM) deep chlorophyll maximum layer (ENVO:01000326)
+6            (SRF) surface water layer (ENVO:00002042)
+  Size.fraction.lower.threshold.[micrometre]
+1                                       0.22
+2                                       0.22
+3                                       0.22
+4                                       0.22
+5                                       0.22
+6                                       0.22
+  Size.fraction.upper.threshold.[micrometre]
+1                                        1.6
+2                                        1.6
+3                                        1.6
+4                                        1.6
+5                                        1.6
+6                                        1.6
+  Marine.pelagic.biomes.(Longhurst.2007)
+1                       Westerlies Biome
+2                       Westerlies Biome
+3                       Westerlies Biome
+4                       Westerlies Biome
+5                       Westerlies Biome
+6                       Westerlies Biome
+  Ocean.and.sea.regions.(IHO.General.Sea.Areas.1953).[MRGID.registered.at.www.marineregions.com]
+1                                                        (NAO) North Atlantic Ocean [MRGID:1912]
+2                                                        (NAO) North Atlantic Ocean [MRGID:1912]
+3                                                            (MS) Mediterranean Sea [MRGID:1905]
+4                                                            (MS) Mediterranean Sea [MRGID:1905]
+5                                                            (MS) Mediterranean Sea [MRGID:1905]
+6                                                            (MS) Mediterranean Sea [MRGID:1905]
+  Marine.pelagic.biomes.(Longhurst.2007).[MRGID.registered.at.www.marineregions.com]
+1                   (NAST-E) North Atlantic Subtropical Gyral Province [MRGID:21467]
+2                   (NAST-E) North Atlantic Subtropical Gyral Province [MRGID:21467]
+3                         (MEDI) Mediterranean Sea, Black Sea Province [MRGID:21465]
+4                         (MEDI) Mediterranean Sea, Black Sea Province [MRGID:21465]
+5                         (MEDI) Mediterranean Sea, Black Sea Province [MRGID:21465]
+6                         (MEDI) Mediterranean Sea, Black Sea Province [MRGID:21465]</code></pre>
+<pre class="r"><code>tail(t_w1)</code></pre>
+<pre><code>    Sample.label.[TARA_station#_environmental-feature_size-fraction]
+238                                              TARA_150_SRF_0.22-3
+239                                              TARA_151_DCM_0.22-3
+240                                              TARA_151_SRF_0.22-3
+241                                              TARA_152_MES_0.22-3
+242                                              TARA_152_MIX_0.22-3
+243                                              TARA_152_SRF_0.22-3
+    INSDC.sample.accession.number(s) INSDC.run.accession.number(s)
+238                        ERS494445                     ERR599170
+239                        ERS494559                     ERR598986
+240                        ERS494518                     ERR598976
+241                        ERS494616                     ERR598944
+242                        ERS494628                     ERR599001
+243                        ERS494579                     ERR599078
+    Corresponding.nucleotides.data.published.at.ENA PANGAEA.sample.identifier
+238    http://www.ebi.ac.uk/ena/data/view/ERR599170           TARA_B100001769
+239    http://www.ebi.ac.uk/ena/data/view/ERR598986           TARA_B100001559
+240    http://www.ebi.ac.uk/ena/data/view/ERR598976           TARA_B100001564
+241    http://www.ebi.ac.uk/ena/data/view/ERR598944           TARA_B100001179
+242    http://www.ebi.ac.uk/ena/data/view/ERR599001           TARA_B100001175
+243    http://www.ebi.ac.uk/ena/data/view/ERR599078           TARA_B100001173
+    Corresponding.contextual.data.published.at.PANGAEA
+238 http://www.pangaea.de/search?All&amp;q=TARA_B100001769
+239 http://www.pangaea.de/search?All&amp;q=TARA_B100001559
+240 http://www.pangaea.de/search?All&amp;q=TARA_B100001564
+241 http://www.pangaea.de/search?All&amp;q=TARA_B100001179
+242 http://www.pangaea.de/search?All&amp;q=TARA_B100001175
+243 http://www.pangaea.de/search?All&amp;q=TARA_B100001173
+    Station.identifier.[TARA_station#] Date/Time.[yyyy-mm-ddThh:mm]
+238                           TARA_150             2012-03-05T09:25
+239                           TARA_151          2012-03-09T17:42:29
+240                           TARA_151             2012-03-09T08:59
+241                           TARA_152          2012-03-19T14:59:48
+242                           TARA_152          2012-03-20T08:48:42
+243                           TARA_152             2012-03-19T08:18
+    Latitude.[degrees.North] Longitude.[degrees.East] Sampling.depth.[m]
+238                  35.9346                 -37.3032                  5
+239                  36.1811                 -28.9373                 80
+240                  36.1715                 -29.0230                  5
+241                  43.7182                 -16.8714                800
+242                  43.7056                 -16.8794                 25
+243                  43.6792                 -16.8344                  5
+                                   Environmental.Feature
+238            (SRF) surface water layer (ENVO:00002042)
+239 (DCM) deep chlorophyll maximum layer (ENVO:01000326)
+240            (SRF) surface water layer (ENVO:00002042)
+241               (MES) mesopelagic zone (ENVO:00000213)
+242  (MIX) marine epipelagic mixed layer (ENVO:01000061)
+243            (SRF) surface water layer (ENVO:00002042)
+    Size.fraction.lower.threshold.[micrometre]
+238                                       0.22
+239                                       0.22
+240                                       0.22
+241                                       0.22
+242                                       0.22
+243                                       0.22
+    Size.fraction.upper.threshold.[micrometre]
+238                                          3
+239                                          3
+240                                          3
+241                                          3
+242                                          3
+243                                          3
+    Marine.pelagic.biomes.(Longhurst.2007)
+238                       Westerlies Biome
+239                       Westerlies Biome
+240                       Westerlies Biome
+241                       Westerlies Biome
+242                       Westerlies Biome
+243                       Westerlies Biome
+    Ocean.and.sea.regions.(IHO.General.Sea.Areas.1953).[MRGID.registered.at.www.marineregions.com]
+238                                                        (NAO) North Atlantic Ocean [MRGID:1912]
+239                                                        (NAO) North Atlantic Ocean [MRGID:1912]
+240                                                        (NAO) North Atlantic Ocean [MRGID:1912]
+241                                                        (NAO) North Atlantic Ocean [MRGID:1912]
+242                                                        (NAO) North Atlantic Ocean [MRGID:1912]
+243                                                        (NAO) North Atlantic Ocean [MRGID:1912]
+    Marine.pelagic.biomes.(Longhurst.2007).[MRGID.registered.at.www.marineregions.com]
+238                   (NAST-W) North Atlantic Subtropical Gyral Province [MRGID:21455]
+239                   (NAST-E) North Atlantic Subtropical Gyral Province [MRGID:21467]
+240                   (NAST-E) North Atlantic Subtropical Gyral Province [MRGID:21467]
+241                   (NAST-E) North Atlantic Subtropical Gyral Province [MRGID:21467]
+242                   (NAST-E) North Atlantic Subtropical Gyral Province [MRGID:21467]
+243                   (NAST-E) North Atlantic Subtropical Gyral Province [MRGID:21467]</code></pre>
+<pre class="r"><code>colnames(t_w1)</code></pre>
+<pre><code> [1] &quot;Sample.label.[TARA_station#_environmental-feature_size-fraction]&quot;                              
+ [2] &quot;INSDC.sample.accession.number(s)&quot;                                                              
+ [3] &quot;INSDC.run.accession.number(s)&quot;                                                                 
+ [4] &quot;Corresponding.nucleotides.data.published.at.ENA&quot;                                               
+ [5] &quot;PANGAEA.sample.identifier&quot;                                                                     
+ [6] &quot;Corresponding.contextual.data.published.at.PANGAEA&quot;                                            
+ [7] &quot;Station.identifier.[TARA_station#]&quot;                                                            
+ [8] &quot;Date/Time.[yyyy-mm-ddThh:mm]&quot;                                                                  
+ [9] &quot;Latitude.[degrees.North]&quot;                                                                      
+[10] &quot;Longitude.[degrees.East]&quot;                                                                      
+[11] &quot;Sampling.depth.[m]&quot;                                                                            
+[12] &quot;Environmental.Feature&quot;                                                                         
+[13] &quot;Size.fraction.lower.threshold.[micrometre]&quot;                                                    
+[14] &quot;Size.fraction.upper.threshold.[micrometre]&quot;                                                    
+[15] &quot;Marine.pelagic.biomes.(Longhurst.2007)&quot;                                                        
+[16] &quot;Ocean.and.sea.regions.(IHO.General.Sea.Areas.1953).[MRGID.registered.at.www.marineregions.com]&quot;
+[17] &quot;Marine.pelagic.biomes.(Longhurst.2007).[MRGID.registered.at.www.marineregions.com]&quot;            </code></pre>
+<pre class="r"><code>df_w1 &lt;- t_w1 %&gt;% select(&quot;Sample.label.[TARA_station#_environmental-feature_size-fraction]&quot;, &quot;PANGAEA.sample.identifier&quot;) %&gt;% rename(Sample.label=&quot;Sample.label.[TARA_station#_environmental-feature_size-fraction]&quot;, PANGAEA.Sample.ID = &quot;PANGAEA.sample.identifier&quot;)
+
+dim(df_w1) # 243</code></pre>
+<pre><code>[1] 243   2</code></pre>
+<pre class="r"><code>t_w8 &lt;- openxlsx::read.xlsx(&quot;data/OM.CompanionTables.xlsx&quot;, sheet = &quot;Table W8&quot;)
+dim(t_w8) # 245</code></pre>
+<pre><code>[1] 245  37</code></pre>
+<pre class="r"><code>head(t_w8)</code></pre>
+<pre><code>  PANGAEA.Sample.ID Mean_Date.[YY/MM/DD.hh:mm]*  Mean_Lat* Mean_Long*
+1   TARA_B100000965                    40648.55 -12.994483  -95.98550
+2   TARA_B100000959                    40649.67 -12.931623  -96.11851
+3   TARA_B100000963                    40648.55 -12.994483  -95.98550
+4   TARA_B100000902                    40655.83  -5.269667  -85.22873
+5   TARA_B100000953                    40655.59  -5.266542  -85.22347
+6   TARA_B100000900                    40654.84  -5.252333  -85.16098
+  Mean_Depth.[m]* Mean_Temperature.[deg.C]* Mean_Salinity.[PSU]*
+1        57.62251                 20.649431             35.54465
+2       175.25680                 13.014573             34.84022
+3         5.47900                 25.251200             35.83527
+4        45.65903                 19.566255             34.90028
+5       475.61937                  9.195825             34.69255
+6         5.47850                 24.943108             34.74818
+  Mean_Oxygen.[umol/kg]* Mean_Nitrates[umol/L]* NO2.[umol/L]** PO4.[umol/L]**
+1              216.79034               1.501977           0.16           0.78
+2                0.70843              21.068385           0.03           2.68
+3              200.23392               4.590737           0.14           0.68
+4              103.91671              20.328327           1.20           1.86
+5                4.42525              40.008967           0.01           2.85
+6              205.99258              11.688971           0.32           1.00
+  NO2NO3.[umol/L]** SI.[umol/L]** AMODIS:PAR8d,Einsteins/m-2/d-1 Okubo-Weiss
+1               5.7           1.9                         41.790   -0.019027
+2              23.9          19.6                         43.053   -0.019027
+3               6.2           1.2                         41.790   -0.019027
+4              24.4          10.5                         44.432   -0.001093
+5              39.2          40.6                         44.432   -0.001093
+6              12.6           5.0                         42.123   -0.001093
+  Lyapunov_exp. grad_SST_adv retention Mean.Depth.MLD.Sigma.[m]*
+1      0.052949     0.336455  8.972222                  34.57143
+2      0.052949     0.336455  8.972222                  34.57143
+3      0.052949     0.336455  8.972222                  34.57143
+4      0.035834     1.800960  3.750000                  17.71429
+5      0.035834     1.800960  3.750000                  17.71429
+6      0.035834     1.800960  3.750000                  17.71429
+  Mean.Depth.Max.Fluo.[m]* Mean.Depth.Max.N2.[m]* Mean.Depth.Max.O2.[m]*
+1                 60.85714               51.42857               51.71429
+2                 60.85714               51.42857               51.71429
+3                 60.85714               51.42857               51.71429
+4                 36.57143               36.14286               28.57143
+5                 36.57143               36.14286               28.57143
+6                 36.57143               36.14286               28.57143
+  Mean.Depth.Min.O2.[m]* Mean.Depth.Nitracline.[m]* miTAG.SILVA.Taxo.Richness
+1               239.1429                  146.42857                   3053.30
+2               239.1429                  146.42857                   3171.92
+3               239.1429                  146.42857                   2411.64
+4               353.0000                   41.14286                   2931.41
+5               353.0000                   41.14286                   3108.36
+6               353.0000                   41.14286                   2293.39
+  miTAG.SILVA.Phylo.Diversity miTAG.SILVA.Chao miTAG.SILVA.ace
+1                    467.2175         4404.434        4229.796
+2                    504.8805         4805.282        4685.671
+3                    386.5568         3503.551        3458.746
+4                    447.7911         4240.667        4111.078
+5                    490.8377         4723.346        4642.517
+6                    357.0041         3197.769        3092.857
+  miTAG.SILVA.Shannon OG.Shannon OG.Richness OG.Evenness
+1            6.829191   7.247579     18464.5   0.7377719
+2            6.678287   7.230797     17447.9   0.7403314
+3            6.603492   7.165956     14283.0   0.7490425
+4            6.781489   7.171533     15878.3   0.7414195
+5            6.680479   7.187370     17457.4   0.7358443
+6            6.615300   7.134150     13566.0   0.7497543
+  FC.-.heterotrophs.[cells/mL] FC.-.autotrophs.[cells/mL]
+1                     384276.0                   116140.6
+2                     305319.3                        0.0
+3                     464267.2                   155789.1
+4                    1071413.8                   246946.9
+5                     162019.2                        0.0
+6                    1032721.0                   192334.7
+  FC.-.bacteria.[cells/mL] FC.-.picoeukaryotes.[cells/mL]
+1                 500416.6                       4501.337
+2                 305319.3                          0.000
+3                 620056.2                       7779.900
+4                1318360.7                      13381.734
+5                 162019.2                          0.000
+6                1225055.7                      19090.560
+  minimum.generation.time.[h]
+1                    13.64631
+2                    25.77311
+3                    14.38445
+4                    11.54886
+5                    26.63684
+6                    12.20657</code></pre>
+<pre class="r"><code>tail(t_w8)</code></pre>
+<pre><code>                                                                                                                         PANGAEA.Sample.ID
+240                                                                                                                        TARA_B100001029
+241                                                                                                                        TARA_B100001013
+242                                                                                                                        TARA_B100001027
+243                                                                                                                        TARA_B100000886
+244 *values indicate mean values based on CTD casts that matched closest in location and depth of the actual sampling locations (table S1)
+245              ** note that some values are equal or below the detection limit of 0,02umol/L and should be interpretated as &lt;=0,02umol/L
+    Mean_Date.[YY/MM/DD.hh:mm]* Mean_Lat* Mean_Long* Mean_Depth.[m]*
+240                    40637.35 -25.85086  -111.7726      183.312120
+241                    40637.73 -25.81512  -111.7421      481.098200
+242                    40636.76 -25.82523  -111.7757        5.558167
+243                    40642.59 -21.14647  -104.7926        5.398167
+244                          NA        NA         NA              NA
+245                          NA        NA         NA              NA
+    Mean_Temperature.[deg.C]* Mean_Salinity.[PSU]* Mean_Oxygen.[umol/kg]*
+240                 20.171605             35.84567               210.5781
+241                  8.113126             34.36265               155.5576
+242                 25.148750             36.40268               200.5382
+243                 23.788833             36.12912               203.9954
+244                        NA                   NA                     NA
+245                        NA                   NA                     NA
+    Mean_Nitrates[umol/L]* NO2.[umol/L]** PO4.[umol/L]** NO2NO3.[umol/L]**
+240              -0.733160           0.02           0.10              0.05
+241              24.644021           0.00           2.02             27.29
+242              -1.567491           0.00           0.20              0.05
+243              -1.737405           0.00           0.29              0.04
+244                     NA             NA             NA                NA
+245                     NA             NA             NA                NA
+    SI.[umol/L]** AMODIS:PAR8d,Einsteins/m-2/d-1 Okubo-Weiss Lyapunov_exp.
+240          0.35                         44.636   -0.032809      0.025203
+241         12.05                         45.002   -0.032809      0.025203
+242          0.38                         44.893   -0.032809      0.025203
+243          0.55                         44.569   -0.002996      0.000000
+244            NA                             NA          NA            NA
+245            NA                             NA          NA            NA
+    grad_SST_adv retention Mean.Depth.MLD.Sigma.[m]* Mean.Depth.Max.Fluo.[m]*
+240     0.363686  61.77778                  53.16667                 175.8333
+241     0.363686  61.77778                  53.16667                 175.8333
+242     0.363686  61.77778                  53.16667                 175.8333
+243     0.712640  13.52778                  62.50000                 145.0000
+244           NA        NA                        NA                       NA
+245           NA        NA                        NA                       NA
+    Mean.Depth.Max.N2.[m]* Mean.Depth.Max.O2.[m]* Mean.Depth.Min.O2.[m]*
+240                   72.5               93.33333               484.1667
+241                   72.5               93.33333               484.1667
+242                   72.5               93.33333               484.1667
+243                   71.5               98.50000               388.0000
+244                     NA                     NA                     NA
+245                     NA                     NA                     NA
+    Mean.Depth.Nitracline.[m]* miTAG.SILVA.Taxo.Richness
+240                   360.4167                   2716.87
+241                   360.4167                   3102.61
+242                   360.4167                   2195.00
+243                   313.5000                   2236.97
+244                         NA                        NA
+245                         NA                        NA
+    miTAG.SILVA.Phylo.Diversity miTAG.SILVA.Chao miTAG.SILVA.ace
+240                    430.0849         3972.083        3844.487
+241                    499.2476         4911.567        4841.997
+242                    342.8881         3094.568        3050.461
+243                    354.2443         3184.903        3089.806
+244                          NA               NA              NA
+245                          NA               NA              NA
+    miTAG.SILVA.Shannon OG.Shannon OG.Richness OG.Evenness
+240            6.469351   7.095085     14256.3   0.7417795
+241            6.538486   7.096196     17162.4   0.7277795
+242            6.279306   7.089089     14079.2   0.7421226
+243            6.401978   7.106772     13751.3   0.7458139
+244                  NA         NA          NA          NA
+245                  NA         NA          NA          NA
+    FC.-.heterotrophs.[cells/mL] FC.-.autotrophs.[cells/mL]
+240                     183521.6                   85754.67
+241                      54704.0                       0.00
+242                     387346.2                       0.00
+243                           NA                         NA
+244                           NA                         NA
+245                           NA                         NA
+    FC.-.bacteria.[cells/mL] FC.-.picoeukaryotes.[cells/mL]
+240                 269276.2                       420.3286
+241                  54704.0                         0.0000
+242                 387346.2                       435.6133
+243                       NA                             NA
+244                       NA                             NA
+245                       NA                             NA
+    minimum.generation.time.[h]
+240                    13.33833
+241                    21.12038
+242                    14.75369
+243                    14.50248
+244                          NA
+245                          NA</code></pre>
+<pre class="r"><code>colnames(t_w8)</code></pre>
+<pre><code> [1] &quot;PANGAEA.Sample.ID&quot;              &quot;Mean_Date.[YY/MM/DD.hh:mm]*&quot;   
+ [3] &quot;Mean_Lat*&quot;                      &quot;Mean_Long*&quot;                    
+ [5] &quot;Mean_Depth.[m]*&quot;                &quot;Mean_Temperature.[deg.C]*&quot;     
+ [7] &quot;Mean_Salinity.[PSU]*&quot;           &quot;Mean_Oxygen.[umol/kg]*&quot;        
+ [9] &quot;Mean_Nitrates[umol/L]*&quot;         &quot;NO2.[umol/L]**&quot;                
+[11] &quot;PO4.[umol/L]**&quot;                 &quot;NO2NO3.[umol/L]**&quot;             
+[13] &quot;SI.[umol/L]**&quot;                  &quot;AMODIS:PAR8d,Einsteins/m-2/d-1&quot;
+[15] &quot;Okubo-Weiss&quot;                    &quot;Lyapunov_exp.&quot;                 
+[17] &quot;grad_SST_adv&quot;                   &quot;retention&quot;                     
+[19] &quot;Mean.Depth.MLD.Sigma.[m]*&quot;      &quot;Mean.Depth.Max.Fluo.[m]*&quot;      
+[21] &quot;Mean.Depth.Max.N2.[m]*&quot;         &quot;Mean.Depth.Max.O2.[m]*&quot;        
+[23] &quot;Mean.Depth.Min.O2.[m]*&quot;         &quot;Mean.Depth.Nitracline.[m]*&quot;    
+[25] &quot;miTAG.SILVA.Taxo.Richness&quot;      &quot;miTAG.SILVA.Phylo.Diversity&quot;   
+[27] &quot;miTAG.SILVA.Chao&quot;               &quot;miTAG.SILVA.ace&quot;               
+[29] &quot;miTAG.SILVA.Shannon&quot;            &quot;OG.Shannon&quot;                    
+[31] &quot;OG.Richness&quot;                    &quot;OG.Evenness&quot;                   
+[33] &quot;FC.-.heterotrophs.[cells/mL]&quot;   &quot;FC.-.autotrophs.[cells/mL]&quot;    
+[35] &quot;FC.-.bacteria.[cells/mL]&quot;       &quot;FC.-.picoeukaryotes.[cells/mL]&quot;
+[37] &quot;minimum.generation.time.[h]&quot;   </code></pre>
+<pre class="r"><code>t_w8 &lt;- t_w8[1:243, ]
+# remove 2 rows at the bottom
+
+
+# what is the 2 IDs that are not in W1?
+intersect(df_w1$PANGAEA.Sample.ID, t_w8$PANGAEA.Sample.ID)</code></pre>
+<pre><code>  [1] &quot;TARA_X000000368&quot; &quot;TARA_Y200000002&quot; &quot;TARA_A200000159&quot; &quot;TARA_A200000113&quot;
+  [5] &quot;TARA_X000001036&quot; &quot;TARA_X000000950&quot; &quot;TARA_S200000501&quot; &quot;TARA_A100000172&quot;
+  [9] &quot;TARA_A100000164&quot; &quot;TARA_A100000171&quot; &quot;TARA_S200002703&quot; &quot;TARA_E500000081&quot;
+ [13] &quot;TARA_X000001382&quot; &quot;TARA_E500000075&quot; &quot;TARA_E500000331&quot; &quot;TARA_E500000305&quot;
+ [17] &quot;TARA_E500000178&quot; &quot;TARA_E500000318&quot; &quot;TARA_A100001011&quot; &quot;TARA_X000001388&quot;
+ [21] &quot;TARA_A100001015&quot; &quot;TARA_A100001388&quot; &quot;TARA_A100001391&quot; &quot;TARA_A100001037&quot;
+ [25] &quot;TARA_A100001518&quot; &quot;TARA_A100001035&quot; &quot;TARA_A100001515&quot; &quot;TARA_A100001234&quot;
+ [29] &quot;TARA_B100000029&quot; &quot;TARA_R100000008&quot; &quot;TARA_Y100000004&quot; &quot;TARA_B100000003&quot;
+ [33] &quot;TARA_R100000005&quot; &quot;TARA_B100000035&quot; &quot;TARA_R100000030&quot; &quot;TARA_Y100000015&quot;
+ [37] &quot;TARA_Y100000022&quot; &quot;TARA_R100000027&quot; &quot;TARA_Y100000310&quot; &quot;TARA_B100000315&quot;
+ [41] &quot;TARA_B100000073&quot; &quot;TARA_R100000084&quot; &quot;TARA_Y100000296&quot; &quot;TARA_Y100000294&quot;
+ [45] &quot;TARA_Y100000289&quot; &quot;TARA_Y100000287&quot; &quot;TARA_R100000081&quot; &quot;TARA_B100000085&quot;
+ [49] &quot;TARA_R100000482&quot; &quot;TARA_Y100000034&quot; &quot;TARA_Y100000031&quot; &quot;TARA_Y100000033&quot;
+ [53] &quot;TARA_R100000479&quot; &quot;TARA_B100000287&quot; &quot;TARA_R100000458&quot; &quot;TARA_Y100000052&quot;
+ [57] &quot;TARA_B100000282&quot; &quot;TARA_R100000455&quot; &quot;TARA_B100000131&quot; &quot;TARA_R100000152&quot;
+ [61] &quot;TARA_B100000123&quot; &quot;TARA_R100000149&quot; &quot;TARA_B100000161&quot; &quot;TARA_R100000406&quot;
+ [65] &quot;TARA_Y100000114&quot; &quot;TARA_B100000242&quot; &quot;TARA_B100000214&quot; &quot;TARA_R100000234&quot;
+ [69] &quot;TARA_B100000212&quot; &quot;TARA_B100000378&quot; &quot;TARA_B000000609&quot; &quot;TARA_B000000565&quot;
+ [73] &quot;TARA_B000000557&quot; &quot;TARA_B000000532&quot; &quot;TARA_Y100000401&quot; &quot;TARA_B100000405&quot;
+ [77] &quot;TARA_R100000315&quot; &quot;TARA_B100000408&quot; &quot;TARA_B100000401&quot; &quot;TARA_R100000322&quot;
+ [81] &quot;TARA_Y100000361&quot; &quot;TARA_B000000441&quot; &quot;TARA_R100001198&quot; &quot;TARA_B000000460&quot;
+ [85] &quot;TARA_Y100000356&quot; &quot;TARA_B000000437&quot; &quot;TARA_R100001230&quot; &quot;TARA_B000000477&quot;
+ [89] &quot;TARA_R100000908&quot; &quot;TARA_B000000475&quot; &quot;TARA_R100000900&quot; &quot;TARA_B100000497&quot;
+ [93] &quot;TARA_Y100000389&quot; &quot;TARA_Y100000385&quot; &quot;TARA_R100000951&quot; &quot;TARA_B100000482&quot;
+ [97] &quot;TARA_Y100000748&quot; &quot;TARA_Y100000746&quot; &quot;TARA_R100000995&quot; &quot;TARA_B100000470&quot;
+[101] &quot;TARA_Y100000758&quot; &quot;TARA_B100000475&quot; &quot;TARA_Y100000741&quot; &quot;TARA_Y100000739&quot;
+[105] &quot;TARA_R100000988&quot; &quot;TARA_B100000446&quot; &quot;TARA_Y100000782&quot; &quot;TARA_Y100000780&quot;
+[109] &quot;TARA_R100001039&quot; &quot;TARA_B100000459&quot; &quot;TARA_Y100000768&quot; &quot;TARA_Y100000766&quot;
+[113] &quot;TARA_R100001015&quot; &quot;TARA_B100000427&quot; &quot;TARA_R100001082&quot; &quot;TARA_B100000508&quot;
+[117] &quot;TARA_R100001086&quot; &quot;TARA_B100000424&quot; &quot;TARA_R100001079&quot; &quot;TARA_B100000519&quot;
+[121] &quot;TARA_Y100000817&quot; &quot;TARA_Y100000814&quot; &quot;TARA_R100001129&quot; &quot;TARA_B100000749&quot;
+[125] &quot;TARA_Y100000815&quot; &quot;TARA_B100000513&quot; &quot;TARA_Y100000816&quot; &quot;TARA_Y100000813&quot;
+[129] &quot;TARA_R100001126&quot; &quot;TARA_B100000530&quot; &quot;TARA_Y100000996&quot; &quot;TARA_Y100000994&quot;
+[133] &quot;TARA_B100000745&quot; &quot;TARA_Y100001001&quot; &quot;TARA_B100000524&quot; &quot;TARA_Y100000992&quot;
+[137] &quot;TARA_Y100000991&quot; &quot;TARA_R100001224&quot; &quot;TARA_B100000767&quot; &quot;TARA_R100000544&quot;
+[141] &quot;TARA_B100000768&quot; &quot;TARA_B100000780&quot; &quot;TARA_B100000795&quot; &quot;TARA_R100001377&quot;
+[145] &quot;TARA_B100000809&quot; &quot;TARA_B100000787&quot; &quot;TARA_B100001059&quot; &quot;TARA_B100001063&quot;
+[149] &quot;TARA_B100001057&quot; &quot;TARA_B100000989&quot; &quot;TARA_B100001029&quot; &quot;TARA_B100001013&quot;
+[153] &quot;TARA_B100001027&quot; &quot;TARA_B100000886&quot; &quot;TARA_B100000965&quot; &quot;TARA_B100000959&quot;
+[157] &quot;TARA_B100000963&quot; &quot;TARA_B100000902&quot; &quot;TARA_B100000953&quot; &quot;TARA_B100000900&quot;
+[161] &quot;TARA_B100000927&quot; &quot;TARA_R100001510&quot; &quot;TARA_B100000929&quot; &quot;TARA_B100000925&quot;
+[165] &quot;TARA_R100001509&quot; &quot;TARA_B100001113&quot; &quot;TARA_B100001079&quot; &quot;TARA_B100001109&quot;
+[169] &quot;TARA_B100000579&quot; &quot;TARA_B100000586&quot; &quot;TARA_B100000575&quot; &quot;TARA_B100000945&quot;
+[173] &quot;TARA_B100000949&quot; &quot;TARA_B100000941&quot; &quot;TARA_Y100001973&quot; &quot;TARA_B100000700&quot;
+[177] &quot;TARA_Y100001970&quot; &quot;TARA_Y100001968&quot; &quot;TARA_Y100001951&quot; &quot;TARA_B100000678&quot;
+[181] &quot;TARA_Y100001949&quot; &quot;TARA_Y100001947&quot; &quot;TARA_Y100001972&quot; &quot;TARA_B100001115&quot;
+[185] &quot;TARA_Y100001980&quot; &quot;TARA_Y100001978&quot; &quot;TARA_Y100001963&quot; &quot;TARA_B100000686&quot;
+[189] &quot;TARA_Y100001960&quot; &quot;TARA_Y100001956&quot; &quot;TARA_B100000683&quot; &quot;TARA_Y100001958&quot;
+[193] &quot;TARA_Y100001954&quot; &quot;TARA_Y100001938&quot; &quot;TARA_B100000676&quot; &quot;TARA_Y100001936&quot;
+[197] &quot;TARA_Y100001934&quot; &quot;TARA_Y100001937&quot; &quot;TARA_B100000674&quot; &quot;TARA_Y100001935&quot;
+[201] &quot;TARA_Y100001933&quot; &quot;TARA_Y100000593&quot; &quot;TARA_B100001123&quot; &quot;TARA_Y100000591&quot;
+[205] &quot;TARA_Y100000589&quot; &quot;TARA_Y100000592&quot; &quot;TARA_B100001121&quot; &quot;TARA_Y100000590&quot;
+[209] &quot;TARA_Y100000588&quot; &quot;TARA_B100000614&quot; &quot;TARA_B100000609&quot; &quot;TARA_B100001250&quot;
+[213] &quot;TARA_B100001245&quot; &quot;TARA_B100001248&quot; &quot;TARA_B100001094&quot; &quot;TARA_B100001105&quot;
+[217] &quot;TARA_B100001093&quot; &quot;TARA_B100001964&quot; &quot;TARA_B100001971&quot; &quot;TARA_B100001287&quot;
+[221] &quot;TARA_B100001996&quot; &quot;TARA_B100002003&quot; &quot;TARA_B100001989&quot; &quot;TARA_B100002019&quot;
+[225] &quot;TARA_B100001939&quot; &quot;TARA_B100002052&quot; &quot;TARA_B100002049&quot; &quot;TARA_B100002051&quot;
+[229] &quot;TARA_B100001146&quot; &quot;TARA_B100001142&quot; &quot;TARA_B100001167&quot; &quot;TARA_B100001540&quot;
+[233] &quot;TARA_B100001741&quot; &quot;TARA_B100001750&quot; &quot;TARA_B100001765&quot; &quot;TARA_B100001758&quot;
+[237] &quot;TARA_B100001778&quot; &quot;TARA_B100001769&quot; &quot;TARA_B100001559&quot; &quot;TARA_B100001564&quot;
+[241] &quot;TARA_B100001179&quot; &quot;TARA_B100001175&quot; &quot;TARA_B100001173&quot;</code></pre>
+<pre class="r"><code>length(intersect(df_w1$PANGAEA.Sample.ID, t_w8$PANGAEA.Sample.ID))</code></pre>
+<pre><code>[1] 243</code></pre>
+<pre class="r"><code>setdiff(df_w1$PANGAEA.Sample.ID, t_w8$PANGAEA.Sample.ID)</code></pre>
+<pre><code>character(0)</code></pre>
+<pre class="r"><code>setdiff(t_w8$PANGAEA.Sample.ID, df_w1$PANGAEA.Sample.ID) # remove 2 rows at the bottom</code></pre>
+<pre><code>character(0)</code></pre>
+<pre class="r"><code># Left join
+df_w18 &lt;- df_w1 %&gt;% left_join(t_w8, by = c(&quot;PANGAEA.Sample.ID&quot; = &quot;PANGAEA.Sample.ID&quot;))
+dim(df_w18)</code></pre>
+<pre><code>[1] 243  38</code></pre>
+<pre class="r"><code>head(df_w18)</code></pre>
+<pre><code>           Sample.label PANGAEA.Sample.ID Mean_Date.[YY/MM/DD.hh:mm]* Mean_Lat*
+1 TARA_004_DCM_0.22-1.6   TARA_X000000368                    40071.70  36.57300
+2 TARA_004_SRF_0.22-1.6   TARA_Y200000002                    40071.43  36.55333
+3 TARA_007_DCM_0.22-1.6   TARA_A200000159                    40079.70  37.03868
+4 TARA_007_SRF_0.22-1.6   TARA_A200000113                    40079.63  37.02107
+5 TARA_009_DCM_0.22-1.6   TARA_X000001036                    40084.57  39.07340
+6 TARA_009_SRF_0.22-1.6   TARA_X000000950                    40084.57  39.07340
+  Mean_Long* Mean_Depth.[m]* Mean_Temperature.[deg.C]* Mean_Salinity.[PSU]*
+1  -6.538667       38.689029                  16.24633             36.55644
+2  -6.566833       10.000000                  20.52510             36.63240
+3   1.949833       41.740393                  17.36746                   NA
+4   1.949467        7.500000                  23.82575             37.49110
+5   5.859833       55.000000                  16.15193             37.82320
+6   5.859833        5.784381                  23.85260             37.97510
+  Mean_Oxygen.[umol/kg]* Mean_Nitrates[umol/L]* NO2.[umol/L]** PO4.[umol/L]**
+1                     NA                     NA             NA             NA
+2                     NA                     NA             NA             NA
+3                     NA                     NA           0.00           0.01
+4                     NA                     NA           0.00           0.06
+5                     NA                     NA           0.02           0.02
+6                     NA                     NA           0.01           0.02
+  NO2NO3.[umol/L]** SI.[umol/L]** AMODIS:PAR8d,Einsteins/m-2/d-1 Okubo-Weiss
+1                NA            NA                         37.643    0.007355
+2                NA            NA                         39.916    0.007355
+3              0.03          0.50                         29.931   -0.794335
+4              0.03          0.52                         29.931   -0.794335
+5              0.08          0.60                         26.661   -0.773622
+6              0.03          0.75                         26.661   -0.773622
+  Lyapunov_exp. grad_SST_adv retention Mean.Depth.MLD.Sigma.[m]*
+1      0.023383           NA  0.000000                       3.5
+2      0.023383           NA  0.000000                       3.5
+3      0.000000           NA  4.916667                      18.0
+4      0.000000           NA  4.916667                      18.0
+5      0.082940     0.690694 13.611111                      21.0
+6      0.082940     0.690694 13.611111                      21.0
+  Mean.Depth.Max.Fluo.[m]* Mean.Depth.Max.N2.[m]* Mean.Depth.Max.O2.[m]*
+1                 38.00000                   17.5                     NA
+2                 38.00000                   17.5                     NA
+3                 44.33333                   40.5                     NA
+4                 44.33333                   40.5                     NA
+5                 52.50000                   34.5                     NA
+6                 52.50000                   34.5                     NA
+  Mean.Depth.Min.O2.[m]* Mean.Depth.Nitracline.[m]* miTAG.SILVA.Taxo.Richness
+1                     NA                         NA                   3054.63
+2                     NA                         NA                   2717.74
+3                     NA                         NA                   3134.91
+4                     NA                         NA                   2591.99
+5                     NA                         NA                   3228.86
+6                     NA                         NA                   2740.60
+  miTAG.SILVA.Phylo.Diversity miTAG.SILVA.Chao miTAG.SILVA.ace
+1                    451.0603         4173.587        4030.463
+2                    406.1298         3762.955        3680.078
+3                    483.2581         4786.076        4585.078
+4                    400.9745         3872.353        3729.129
+5                    473.3118         4462.686        4296.565
+6                    413.5093         3982.790        3865.446
+  miTAG.SILVA.Shannon OG.Shannon OG.Richness OG.Evenness
+1            6.849891   7.160451     14607.3   0.7467149
+2            6.635941   7.145722     14590.9   0.7452660
+3            6.801171   7.279688     16416.5   0.7500163
+4            6.525141   7.201536     15495.1   0.7464064
+5            6.907613   7.154407     15318.4   0.7424042
+6            6.624968   7.222911     15315.1   0.7495296
+  FC.-.heterotrophs.[cells/mL] FC.-.autotrophs.[cells/mL]
+1                    1226212.2                   56383.47
+2                     839530.6                   54593.19
+3                    2580789.0                  156124.58
+4                    1004684.1                   50585.64
+5                     781038.7                   19831.96
+6                     901463.2                   39329.53
+  FC.-.bacteria.[cells/mL] FC.-.picoeukaryotes.[cells/mL]
+1                1282595.7                      6889.9384
+2                 894123.8                      1221.8898
+3                2736913.6                      1859.1433
+4                1055269.8                       812.6444
+5                 800870.7                      2882.2568
+6                 940792.7                      1230.6593
+  minimum.generation.time.[h]
+1                    11.12740
+2                    15.23070
+3                    14.37019
+4                    14.28710
+5                    10.69975
+6                    17.47472</code></pre>
+<pre class="r"><code>tail(df_w18)</code></pre>
+<pre><code>           Sample.label PANGAEA.Sample.ID Mean_Date.[YY/MM/DD.hh:mm]* Mean_Lat*
+238 TARA_150_SRF_0.22-3   TARA_B100001769                    40973.46  35.90705
+239 TARA_151_DCM_0.22-3   TARA_B100001559                    40977.78  36.19444
+240 TARA_151_SRF_0.22-3   TARA_B100001564                    40977.43  36.15577
+241 TARA_152_MES_0.22-3   TARA_B100001179                    40987.68  43.73616
+242 TARA_152_MIX_0.22-3   TARA_B100001175                    40988.51  43.79037
+243 TARA_152_SRF_0.22-3   TARA_B100001173                    40987.45  43.68760
+    Mean_Long* Mean_Depth.[m]* Mean_Temperature.[deg.C]* Mean_Salinity.[PSU]*
+238  -37.26095        5.530167                  17.58308             36.31230
+239  -28.88289       77.569937                  16.75107             36.16289
+240  -29.00890        5.402083                  17.26011             36.23775
+241  -16.88031      791.769433                  10.21177             35.53951
+242  -16.88707       23.856889                  14.30674             35.99843
+243  -16.85152        5.413667                  14.28065             35.98604
+    Mean_Oxygen.[umol/kg]* Mean_Nitrates[umol/L]* NO2.[umol/L]** PO4.[umol/L]**
+238               228.3756              -0.328716          0.040           0.01
+239               228.5452               1.565350          0.010           0.01
+240               232.0533               0.334082          0.020           0.01
+241               175.3067              18.205769          0.011           1.12
+242               239.3619               3.834402          0.320           0.17
+243               243.1480               2.999226          0.310           0.16
+    NO2NO3.[umol/L]** SI.[umol/L]** AMODIS:PAR8d,Einsteins/m-2/d-1 Okubo-Weiss
+238              0.17          0.84                         15.730   -0.179235
+239              0.05          0.63                         18.453   -0.084630
+240              0.02          0.65                         20.692   -0.084630
+241             18.03         10.38                         25.090   -0.000041
+242              2.26          1.26                         24.762   -0.000041
+243              2.16          1.24                         23.761   -0.000041
+    Lyapunov_exp. grad_SST_adv retention Mean.Depth.MLD.Sigma.[m]*
+238      0.041063           NA 22.027778                  77.00000
+239      0.024180           NA 36.944444                  36.16667
+240      0.024180           NA 36.944444                  36.16667
+241      0.106183           NA  2.833333                 167.58333
+242      0.106183           NA  2.833333                 167.58333
+243      0.106183           NA  2.833333                 167.58333
+    Mean.Depth.Max.Fluo.[m]* Mean.Depth.Max.N2.[m]* Mean.Depth.Max.O2.[m]*
+238                 43.33333               101.3333               28.33333
+239                 68.66667               107.3333               36.16667
+240                 68.66667               107.3333               36.16667
+241                 36.58333               521.6667               28.91667
+242                 36.58333               521.6667               28.91667
+243                 36.58333               521.6667               28.91667
+    Mean.Depth.Min.O2.[m]* Mean.Depth.Nitracline.[m]* miTAG.SILVA.Taxo.Richness
+238               481.6667                   110.0000                   2918.03
+239               360.6667                   271.0000                   3598.85
+240               360.6667                   271.0000                   2821.83
+241               671.5833                   575.8333                   3626.07
+242               671.5833                   575.8333                   3303.06
+243               671.5833                   575.8333                   3084.24
+    miTAG.SILVA.Phylo.Diversity miTAG.SILVA.Chao miTAG.SILVA.ace
+238                    448.8827         4161.155        3971.400
+239                    535.9886         5286.142        5034.150
+240                    423.0887         4020.600        3876.811
+241                    554.9446         6000.363        6008.994
+242                    484.1601         4733.762        4524.803
+243                    460.3625         4331.365        4176.870
+    miTAG.SILVA.Shannon OG.Shannon OG.Richness OG.Evenness
+238            6.777680   7.132662     14688.2   0.7433886
+239            6.940453   7.163828     17700.9   0.7323953
+240            6.781089   7.119165     14771.9   0.7415427
+241            6.774180   7.209367     19541.0   0.7296732
+242            6.874782   7.181816     15779.5   0.7429621
+243            6.821129   7.183302     14842.8   0.7478502
+    FC.-.heterotrophs.[cells/mL] FC.-.autotrophs.[cells/mL]
+238                    514204.59                  146022.15
+239                    259769.62                   11715.70
+240                    377257.28                   66885.74
+241                     83945.36                       0.00
+242                    611238.15                   77338.55
+243                    555269.09                  104027.50
+    FC.-.bacteria.[cells/mL] FC.-.picoeukaryotes.[cells/mL]
+238                660226.74                      7940.3892
+239                271485.33                       878.8689
+240                444143.02                      3568.9718
+241                 83945.36                         0.0000
+242                688576.70                      6069.2901
+243                659296.60                      7550.6299
+    minimum.generation.time.[h]
+238                   11.093697
+239                   10.444301
+240                    9.276214
+241                   21.047801
+242                   10.464505
+243                   10.511036</code></pre>
+<pre class="r"><code>colnames(df_w18)</code></pre>
+<pre><code> [1] &quot;Sample.label&quot;                   &quot;PANGAEA.Sample.ID&quot;             
+ [3] &quot;Mean_Date.[YY/MM/DD.hh:mm]*&quot;    &quot;Mean_Lat*&quot;                     
+ [5] &quot;Mean_Long*&quot;                     &quot;Mean_Depth.[m]*&quot;               
+ [7] &quot;Mean_Temperature.[deg.C]*&quot;      &quot;Mean_Salinity.[PSU]*&quot;          
+ [9] &quot;Mean_Oxygen.[umol/kg]*&quot;         &quot;Mean_Nitrates[umol/L]*&quot;        
+[11] &quot;NO2.[umol/L]**&quot;                 &quot;PO4.[umol/L]**&quot;                
+[13] &quot;NO2NO3.[umol/L]**&quot;              &quot;SI.[umol/L]**&quot;                 
+[15] &quot;AMODIS:PAR8d,Einsteins/m-2/d-1&quot; &quot;Okubo-Weiss&quot;                   
+[17] &quot;Lyapunov_exp.&quot;                  &quot;grad_SST_adv&quot;                  
+[19] &quot;retention&quot;                      &quot;Mean.Depth.MLD.Sigma.[m]*&quot;     
+[21] &quot;Mean.Depth.Max.Fluo.[m]*&quot;       &quot;Mean.Depth.Max.N2.[m]*&quot;        
+[23] &quot;Mean.Depth.Max.O2.[m]*&quot;         &quot;Mean.Depth.Min.O2.[m]*&quot;        
+[25] &quot;Mean.Depth.Nitracline.[m]*&quot;     &quot;miTAG.SILVA.Taxo.Richness&quot;     
+[27] &quot;miTAG.SILVA.Phylo.Diversity&quot;    &quot;miTAG.SILVA.Chao&quot;              
+[29] &quot;miTAG.SILVA.ace&quot;                &quot;miTAG.SILVA.Shannon&quot;           
+[31] &quot;OG.Shannon&quot;                     &quot;OG.Richness&quot;                   
+[33] &quot;OG.Evenness&quot;                    &quot;FC.-.heterotrophs.[cells/mL]&quot;  
+[35] &quot;FC.-.autotrophs.[cells/mL]&quot;     &quot;FC.-.bacteria.[cells/mL]&quot;      
+[37] &quot;FC.-.picoeukaryotes.[cells/mL]&quot; &quot;minimum.generation.time.[h]&quot;   </code></pre>
+<pre class="r"><code>length(unique(df_w18$PANGAEA.Sample.ID)) # 243</code></pre>
+<pre><code>[1] 243</code></pre>
+<pre class="r"><code>df_w18$Sample.label</code></pre>
+<pre><code>  [1] &quot;TARA_004_DCM_0.22-1.6&quot;  &quot;TARA_004_SRF_0.22-1.6&quot;  &quot;TARA_007_DCM_0.22-1.6&quot; 
+  [4] &quot;TARA_007_SRF_0.22-1.6&quot;  &quot;TARA_009_DCM_0.22-1.6&quot;  &quot;TARA_009_SRF_0.22-1.6&quot; 
+  [7] &quot;TARA_018_DCM_0.22-1.6&quot;  &quot;TARA_018_DCM_&lt;-0.22&quot;    &quot;TARA_018_SRF_0.22-1.6&quot; 
+ [10] &quot;TARA_018_SRF_&lt;-0.22&quot;    &quot;TARA_022_SRF_&lt;-0.22&quot;    &quot;TARA_023_DCM_0.22-1.6&quot; 
+ [13] &quot;TARA_023_DCM_&lt;-0.22&quot;    &quot;TARA_023_SRF_0.22-1.6&quot;  &quot;TARA_025_DCM_0.22-1.6&quot; 
+ [16] &quot;TARA_025_DCM_&lt;-0.22&quot;    &quot;TARA_025_SRF_0.22-1.6&quot;  &quot;TARA_025_SRF_&lt;-0.22&quot;   
+ [19] &quot;TARA_030_DCM_0.22-1.6&quot;  &quot;TARA_030_DCM_&lt;-0.22&quot;    &quot;TARA_030_SRF_0.22-1.6&quot; 
+ [22] &quot;TARA_031_SRF_0.22-1.6&quot;  &quot;TARA_031_SRF_&lt;-0.22&quot;    &quot;TARA_032_DCM_0.22-1.6&quot; 
+ [25] &quot;TARA_032_DCM_&lt;-0.22&quot;    &quot;TARA_032_SRF_0.22-1.6&quot;  &quot;TARA_032_SRF_&lt;-0.22&quot;   
+ [28] &quot;TARA_033_SRF_0.22-1.6&quot;  &quot;TARA_034_DCM_0.22-1.6&quot;  &quot;TARA_034_DCM_&lt;-0.22&quot;   
+ [31] &quot;TARA_034_SRF_0.1-0.22&quot;  &quot;TARA_034_SRF_0.22-1.6&quot;  &quot;TARA_034_SRF_&lt;-0.22&quot;   
+ [34] &quot;TARA_036_DCM_0.22-1.6&quot;  &quot;TARA_036_DCM_&lt;-0.22&quot;    &quot;TARA_036_SRF_0.1-0.22&quot; 
+ [37] &quot;TARA_036_SRF_0.22-1.6&quot;  &quot;TARA_036_SRF_&lt;-0.22&quot;    &quot;TARA_037_MES_0.1-0.22&quot; 
+ [40] &quot;TARA_037_MES_0.22-1.6&quot;  &quot;TARA_038_DCM_0.22-1.6&quot;  &quot;TARA_038_DCM_&lt;-0.22&quot;   
+ [43] &quot;TARA_038_MES_0.1-0.22&quot;  &quot;TARA_038_MES_0.22-1.6&quot;  &quot;TARA_038_SRF_0.1-0.22&quot; 
+ [46] &quot;TARA_038_SRF_0.22-1.6&quot;  &quot;TARA_038_SRF_&lt;-0.22&quot;    &quot;TARA_039_DCM_0.22-1.6&quot; 
+ [49] &quot;TARA_039_DCM_&lt;-0.22&quot;    &quot;TARA_039_MES_0.1-0.22&quot;  &quot;TARA_039_MES_0.22-1.6&quot; 
+ [52] &quot;TARA_039_SRF_0.1-0.22&quot;  &quot;TARA_039_SRF_&lt;-0.22&quot;    &quot;TARA_041_DCM_0.22-1.6&quot; 
+ [55] &quot;TARA_041_DCM_&lt;-0.22&quot;    &quot;TARA_041_SRF_0.1-0.22&quot;  &quot;TARA_041_SRF_0.22-1.6&quot; 
+ [58] &quot;TARA_041_SRF_&lt;-0.22&quot;    &quot;TARA_042_DCM_0.22-1.6&quot;  &quot;TARA_042_DCM_&lt;-0.22&quot;   
+ [61] &quot;TARA_042_SRF_0.22-1.6&quot;  &quot;TARA_042_SRF_&lt;-0.22&quot;    &quot;TARA_045_SRF_0.22-1.6&quot; 
+ [64] &quot;TARA_046_SRF_&lt;-0.22&quot;    &quot;TARA_048_SRF_0.1-0.22&quot;  &quot;TARA_048_SRF_0.22-1.6&quot; 
+ [67] &quot;TARA_052_DCM_0.22-1.6&quot;  &quot;TARA_052_DCM_&lt;-0.22&quot;    &quot;TARA_052_SRF_0.22-1.6&quot; 
+ [70] &quot;TARA_056_MES_0.22-3&quot;    &quot;TARA_056_SRF_0.22-3&quot;    &quot;TARA_057_SRF_0.22-3&quot;   
+ [73] &quot;TARA_058_DCM_0.22-3&quot;    &quot;TARA_062_SRF_0.22-3&quot;    &quot;TARA_064_DCM_0.1-0.22&quot; 
+ [76] &quot;TARA_064_DCM_0.22-3&quot;    &quot;TARA_064_DCM_&lt;-0.22&quot;    &quot;TARA_064_MES_0.22-3&quot;   
+ [79] &quot;TARA_064_SRF_0.22-3&quot;    &quot;TARA_064_SRF_&lt;-0.22&quot;    &quot;TARA_065_DCM_0.1-0.22&quot; 
+ [82] &quot;TARA_065_DCM_0.22-3&quot;    &quot;TARA_065_DCM_&lt;-0.22&quot;    &quot;TARA_065_MES_0.22-3&quot;   
+ [85] &quot;TARA_065_SRF_0.1-0.22&quot;  &quot;TARA_065_SRF_0.22-3&quot;    &quot;TARA_065_SRF_&lt;-0.22&quot;   
+ [88] &quot;TARA_066_DCM_0.22-3&quot;    &quot;TARA_066_DCM_&lt;-0.22&quot;    &quot;TARA_066_SRF_0.22-3&quot;   
+ [91] &quot;TARA_066_SRF_&lt;-0.22&quot;    &quot;TARA_067_SRF_0.22-3&quot;    &quot;TARA_067_SRF_0.22-0.45&quot;
+ [94] &quot;TARA_067_SRF_0.45-0.8&quot;  &quot;TARA_067_SRF_&lt;-0.22&quot;    &quot;TARA_068_DCM_0.22-3&quot;   
+ [97] &quot;TARA_068_DCM_0.22-0.45&quot; &quot;TARA_068_DCM_0.45-0.8&quot;  &quot;TARA_068_DCM_&lt;-0.22&quot;   
+[100] &quot;TARA_068_MES_0.22-3&quot;    &quot;TARA_068_MES_0.45-0.8&quot;  &quot;TARA_068_SRF_0.22-3&quot;   
+[103] &quot;TARA_068_SRF_0.22-0.45&quot; &quot;TARA_068_SRF_0.45-0.8&quot;  &quot;TARA_068_SRF_&lt;-0.22&quot;   
+[106] &quot;TARA_070_MES_0.22-3&quot;    &quot;TARA_070_MES_0.22-0.45&quot; &quot;TARA_070_MES_0.45-0.8&quot; 
+[109] &quot;TARA_070_MES_&lt;-0.22&quot;    &quot;TARA_070_SRF_0.22-3&quot;    &quot;TARA_070_SRF_0.22-0.45&quot;
+[112] &quot;TARA_070_SRF_0.45-0.8&quot;  &quot;TARA_070_SRF_&lt;-0.22&quot;    &quot;TARA_072_DCM_0.22-3&quot;   
+[115] &quot;TARA_072_DCM_&lt;-0.22&quot;    &quot;TARA_072_MES_0.22-3&quot;    &quot;TARA_072_MES_&lt;-0.22&quot;   
+[118] &quot;TARA_072_SRF_0.22-3&quot;    &quot;TARA_072_SRF_&lt;-0.22&quot;    &quot;TARA_076_DCM_0.22-3&quot;   
+[121] &quot;TARA_076_DCM_0.22-0.45&quot; &quot;TARA_076_DCM_0.45-0.8&quot;  &quot;TARA_076_DCM_&lt;-0.22&quot;   
+[124] &quot;TARA_076_MES_0.22-3&quot;    &quot;TARA_076_MES_0.45-0.8&quot;  &quot;TARA_076_SRF_0.22-3&quot;   
+[127] &quot;TARA_076_SRF_0.22-0.45&quot; &quot;TARA_076_SRF_0.45-0.8&quot;  &quot;TARA_076_SRF_&lt;-0.22&quot;   
+[130] &quot;TARA_078_DCM_0.22-3&quot;    &quot;TARA_078_DCM_0.22-0.45&quot; &quot;TARA_078_DCM_0.45-0.8&quot; 
+[133] &quot;TARA_078_MES_0.22-3&quot;    &quot;TARA_078_MES_0.45-0.8&quot;  &quot;TARA_078_SRF_0.22-3&quot;   
+[136] &quot;TARA_078_SRF_0.22-0.45&quot; &quot;TARA_078_SRF_0.45-0.8&quot;  &quot;TARA_078_SRF_&lt;-0.22&quot;   
+[139] &quot;TARA_082_DCM_0.22-3&quot;    &quot;TARA_082_DCM_&lt;-0.22&quot;    &quot;TARA_082_SRF_0.22-3&quot;   
+[142] &quot;TARA_084_SRF_0.22-3&quot;    &quot;TARA_085_DCM_0.22-3&quot;    &quot;TARA_085_DCM_&lt;-0.22&quot;   
+[145] &quot;TARA_085_MES_0.22-3&quot;    &quot;TARA_085_SRF_0.22-3&quot;    &quot;TARA_093_DCM_0.22-3&quot;   
+[148] &quot;TARA_093_SRF_0.22-3&quot;    &quot;TARA_094_SRF_0.22-3&quot;    &quot;TARA_096_SRF_0.22-3&quot;   
+[151] &quot;TARA_098_DCM_0.22-3&quot;    &quot;TARA_098_MES_0.22-3&quot;    &quot;TARA_098_SRF_0.22-3&quot;   
+[154] &quot;TARA_099_SRF_0.22-3&quot;    &quot;TARA_100_DCM_0.22-3&quot;    &quot;TARA_100_MES_0.22-3&quot;   
+[157] &quot;TARA_100_SRF_0.22-3&quot;    &quot;TARA_102_DCM_0.22-3&quot;    &quot;TARA_102_MES_0.22-3&quot;   
+[160] &quot;TARA_102_SRF_0.22-3&quot;    &quot;TARA_109_DCM_0.22-3&quot;    &quot;TARA_109_DCM_&lt;-0.22&quot;   
+[163] &quot;TARA_109_MES_0.22-3&quot;    &quot;TARA_109_SRF_0.22-3&quot;    &quot;TARA_109_SRF_&lt;-0.22&quot;   
+[166] &quot;TARA_110_DCM_0.22-3&quot;    &quot;TARA_110_MES_0.22-3&quot;    &quot;TARA_110_SRF_0.22-3&quot;   
+[169] &quot;TARA_111_DCM_0.22-3&quot;    &quot;TARA_111_MES_0.22-3&quot;    &quot;TARA_111_SRF_0.22-3&quot;   
+[172] &quot;TARA_112_DCM_0.22-3&quot;    &quot;TARA_112_MES_0.22-3&quot;    &quot;TARA_112_SRF_0.22-3&quot;   
+[175] &quot;TARA_122_DCM_0.1-0.22&quot;  &quot;TARA_122_DCM_0.22-3&quot;    &quot;TARA_122_DCM_0.22-0.45&quot;
+[178] &quot;TARA_122_DCM_0.45-0.8&quot;  &quot;TARA_122_MES_0.1-0.22&quot;  &quot;TARA_122_MES_0.22-3&quot;   
+[181] &quot;TARA_122_MES_0.22-0.45&quot; &quot;TARA_122_MES_0.45-0.8&quot;  &quot;TARA_122_SRF_0.1-0.22&quot; 
+[184] &quot;TARA_122_SRF_0.22-3&quot;    &quot;TARA_122_SRF_0.22-0.45&quot; &quot;TARA_122_SRF_0.45-0.8&quot; 
+[187] &quot;TARA_123_MIX_0.1-0.22&quot;  &quot;TARA_123_MIX_0.22-3&quot;    &quot;TARA_123_MIX_0.22-0.45&quot;
+[190] &quot;TARA_123_MIX_0.45-0.8&quot;  &quot;TARA_123_SRF_0.22-3&quot;    &quot;TARA_123_SRF_0.22-0.45&quot;
+[193] &quot;TARA_123_SRF_0.45-0.8&quot;  &quot;TARA_124_MIX_0.1-0.22&quot;  &quot;TARA_124_MIX_0.22-3&quot;   
+[196] &quot;TARA_124_MIX_0.22-0.45&quot; &quot;TARA_124_MIX_0.45-0.8&quot;  &quot;TARA_124_SRF_0.1-0.22&quot; 
+[199] &quot;TARA_124_SRF_0.22-3&quot;    &quot;TARA_124_SRF_0.22-0.45&quot; &quot;TARA_124_SRF_0.45-0.8&quot; 
+[202] &quot;TARA_125_MIX_0.1-0.22&quot;  &quot;TARA_125_MIX_0.22-3&quot;    &quot;TARA_125_MIX_0.22-0.45&quot;
+[205] &quot;TARA_125_MIX_0.45-0.8&quot;  &quot;TARA_125_SRF_0.1-0.22&quot;  &quot;TARA_125_SRF_0.22-3&quot;   
+[208] &quot;TARA_125_SRF_0.22-0.45&quot; &quot;TARA_125_SRF_0.45-0.8&quot;  &quot;TARA_128_DCM_0.22-3&quot;   
+[211] &quot;TARA_128_SRF_0.22-3&quot;    &quot;TARA_132_DCM_0.22-3&quot;    &quot;TARA_132_MES_0.22-3&quot;   
+[214] &quot;TARA_132_SRF_0.22-3&quot;    &quot;TARA_133_DCM_0.22-3&quot;    &quot;TARA_133_MES_0.22-3&quot;   
+[217] &quot;TARA_133_SRF_0.22-3&quot;    &quot;TARA_137_DCM_0.22-3&quot;    &quot;TARA_137_MES_0.22-3&quot;   
+[220] &quot;TARA_137_SRF_0.22-3&quot;    &quot;TARA_138_DCM_0.22-3&quot;    &quot;TARA_138_MES_0.22-3&quot;   
+[223] &quot;TARA_138_SRF_0.22-3&quot;    &quot;TARA_140_SRF_0.22-3&quot;    &quot;TARA_141_SRF_0.22-3&quot;   
+[226] &quot;TARA_142_DCM_0.22-3&quot;    &quot;TARA_142_MES_0.22-3&quot;    &quot;TARA_142_SRF_0.22-3&quot;   
+[229] &quot;TARA_145_MES_0.22-3&quot;    &quot;TARA_145_SRF_0.22-3&quot;    &quot;TARA_146_MES_0.22-3&quot;   
+[232] &quot;TARA_146_SRF_0.22-3&quot;    &quot;TARA_148_SRF_0.22-3&quot;    &quot;TARA_148b_MES_0.22-3&quot;  
+[235] &quot;TARA_149_MES_0.22-3&quot;    &quot;TARA_149_SRF_0.22-3&quot;    &quot;TARA_150_DCM_0.22-3&quot;   
+[238] &quot;TARA_150_SRF_0.22-3&quot;    &quot;TARA_151_DCM_0.22-3&quot;    &quot;TARA_151_SRF_0.22-3&quot;   
+[241] &quot;TARA_152_MES_0.22-3&quot;    &quot;TARA_152_MIX_0.22-3&quot;    &quot;TARA_152_SRF_0.22-3&quot;   </code></pre>
+<pre class="r"><code>openxlsx::write.xlsx(df_w18, &quot;Sample.label_metadata.xlsx&quot;)</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.3 (2020-10-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 22000)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] ape_5.5            openxlsx_4.2.3     devtools_2.4.0     usethis_2.0.1     
+ [5] gtools_3.8.2       reshape2_1.4.4     readxl_1.3.1       magrittr_2.0.1    
+ [9] forcats_0.5.1      stringr_1.4.0      purrr_0.3.4        readr_1.4.0       
+[13] tidyr_1.1.3        tibble_3.0.4       tidyverse_1.3.1    vegan_2.5-7       
+[17] lattice_0.20-41    permute_0.9-5      RColorBrewer_1.1-2 ggplot2_3.3.5     
+[21] dplyr_1.0.5        workflowr_1.6.2   
+
+loaded via a namespace (and not attached):
+ [1] nlme_3.1-149      fs_1.5.0          lubridate_1.7.10  httr_1.4.2       
+ [5] rprojroot_2.0.2   tools_4.0.3       backports_1.2.1   bslib_0.2.5.1    
+ [9] utf8_1.1.4        R6_2.5.0          DBI_1.1.1         mgcv_1.8-33      
+[13] colorspace_2.0-0  withr_2.4.2       prettyunits_1.1.1 processx_3.5.1   
+[17] tidyselect_1.1.1  compiler_4.0.3    git2r_0.28.0      cli_3.0.1        
+[21] rvest_1.0.1       xml2_1.3.2        desc_1.3.0        sass_0.4.0       
+[25] scales_1.1.1      callr_3.7.0       digest_0.6.27     rmarkdown_2.9    
+[29] pkgconfig_2.0.3   htmltools_0.5.1.1 sessioninfo_1.1.1 highr_0.9        
+[33] dbplyr_2.1.1      fastmap_1.1.0     rlang_0.4.10      rstudioapi_0.13  
+[37] jquerylib_0.1.4   generics_0.1.0    jsonlite_1.7.2    zip_2.1.1        
+[41] Matrix_1.2-18     Rcpp_1.0.5        munsell_0.5.0     fansi_0.4.2      
+[45] lifecycle_1.0.0   stringi_1.5.3     whisker_0.4       yaml_2.2.1       
+[49] MASS_7.3-53       pkgbuild_1.2.0    plyr_1.8.6        grid_4.0.3       
+[53] parallel_4.0.3    promises_1.2.0.1  crayon_1.4.1      haven_2.4.1      
+[57] splines_4.0.3     hms_1.1.0         ps_1.6.0          knitr_1.37       
+[61] pillar_1.6.0      pkgload_1.2.1     reprex_2.0.0      glue_1.4.2       
+[65] evaluate_0.14     remotes_2.4.0     modelr_0.1.8      vctrs_0.3.8      
+[69] httpuv_1.6.0      testthat_3.0.2    cellranger_1.1.0  gtable_0.3.0     
+[73] assertthat_0.2.1  cachem_1.0.4      xfun_0.29         broom_0.7.9      
+[77] later_1.2.0       memoise_2.0.0     cluster_2.1.0     ellipsis_0.3.2   </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
