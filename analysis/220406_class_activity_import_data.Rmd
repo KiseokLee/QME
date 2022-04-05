@@ -74,7 +74,7 @@ df_taxa_level <- df_sample %>% select(taxa_level, vec_sample)
 # add up the read abundance in each taxa in each sample
 df_taxa_aggre <- aggregate(df_taxa_level[,2:ncol(df_taxa_level)], by = df_taxa_level[1], function(x) sum(x, na.rm = TRUE))
 dim(df_taxa_aggre)
-head(df_taxa_aggre)
+#head(df_taxa_aggre)
 
 # get relative abundance
 df_rel_abun <- df_taxa_aggre
@@ -149,7 +149,7 @@ eigs[2] / sum(eigs) # pc2
 # dataframe for plotting
 df_out <- as.data.frame(pc$x) # extract principal components
 dim(df_out)
-head(df_out)
+#head(df_out)
 
 # add environmental variable
 df_out <- df_out %>% select(PC1, PC2, PC3) # get only PC1, 2, 3
@@ -203,12 +203,12 @@ df_meta1 <- tibble::remove_rownames(df_meta)
 df_meta1 <- df_meta1 %>% filter(Sample.label %in% df_out$Sample.label)
 df_meta1 <- tibble::column_to_rownames(df_meta1, var = "Sample.label")
 df_meta1 <- df_meta1[,c(-1,-2)] # remove PANGAEA id and mean date
-head(df_meta1)
+#head(df_meta1)
 df_meta_norm <- scale(df_meta1) # z-score transformation
 df_meta_norm <- as.data.frame(df_meta_norm)
 apply(df_meta_norm, 2, mean, na.rm=T) # column wise mean is 0
 
-head(df_meta_norm)
+#head(df_meta_norm)
 # colnames(df_meta_norm)
 
 # select a subset of variables
@@ -271,7 +271,7 @@ eigs[2] / sum(eigs) # pc2
 # dataframe for plotting
 df_out <- as.data.frame(pc$x)
 dim(df_out)
-head(df_out)
+#head(df_out)
 
 # add environmental variable
 df_out <- df_out %>% select(PC1, PC2, PC3) # get only PC1, 2, 3
